@@ -1,6 +1,6 @@
 **1) Project Description:**
 
-Our web application is a Personality to Book matcher which allows users to sign in to a personal account using OAuth to take a short personality quiz, utilizing the 16 personalities test API to identify their personality type. The application then matches this personality type with a predefined list of book genres (e.g., Inquisitive personality -> Mystery genre) and recommends books within that genre using the Goodreads API.
+Our web application is a Personality to Book matcher which allows users to sign in to a personal account using OAuth to take a short personality quiz. Utilizing the 16 personalities test API to identify their personality type, the application then matches this personality type with a predefined list of book genres (e.g., Inquisitive personality -> Mystery genre) and recommends books within that genre using the Goodreads API.
 
 **2) Product Requirements:**
 
