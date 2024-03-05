@@ -15,6 +15,7 @@ The following is completed:
     - [x] Successfully rendered a static webpage.   
   - [x] Identified mySQL as primary DB technology.
   - [ ] We identified a critical issue with one of our external APIs: "16 Personalities" no longer offers public API keys. We are attempting to substitute another open source personality test (ongoing: getting help on office hours 3/4/2024).
+        Video link: https://drive.google.com/file/d/1utqkpNfVl7NAhS-4Ts8Z5VqcKZtOIyWD/view?usp=drive_link
 
 NOTE: As of 3/4, we have identified a critical issue regarding API keys and are in the process of modifying our project requirements to accommodate a shift in direction. We are actively seeking assistance to integrate a suitable alternative, and will be altering the project's scope accordingly in the interim.
   
