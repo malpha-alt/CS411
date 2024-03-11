@@ -16,7 +16,7 @@ def testApi():
     '''if form.validate_on_submit():
         name = form.ids.data  # Retrieve user input'''
 
-    api_key = "key"
+    api_key = "KEY"
     headers = {
         "x-api-key": api_key,
         "Accept": "application/json"
@@ -30,7 +30,7 @@ def testApi():
         artist_name = item.get("name")
         artistSearch_text += str(iter) +'. Artist Name: ' + artist_name + '<br>'
         iter += 1
-    return artistSearch_text
+    return render_template('map.html')
 
 class SearchForm(FlaskForm):
     ids = StringField("ID",validators=[DataRequired()])
