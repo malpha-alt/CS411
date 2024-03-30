@@ -1,0 +1,7 @@
+requests==2.27.1
+Flask==2.0.3
+oauthlib==3.2.2
+pyOpenSSL==23.2.0
+Flask-Login==0.5.0
+sqlalchemy==1.4.52
+python-dotenv==0.20.0
