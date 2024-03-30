@@ -9,7 +9,9 @@
 
 The following is completed:
 - [x] Requirements Analysis: requirements.md
-- [x] Tech Stack Hello World 
+- [x] Tech Stack Hello World
+- [ ] OAUTH2
+  - Initial test seems to work. Need to store data into User table in mySQL and retest     
   
 ## Tech Stack Hello World - 3/5
   - [x] Identified Flask as primary framework.
