@@ -11,7 +11,8 @@ The following is completed:
 - [x] Requirements Analysis: requirements.md
 - [x] Tech Stack Hello World
 - [ ] OAUTH2
-  - Initial test seems to work. Need to store data into User table in mySQL and retest     
+  - Initial test seems to work. Able to redirect to Google OAuth and return after login.
+    - Todo: Need to determine User schema to store data into mySQL and retest     
   
 ## Tech Stack Hello World - 3/5
   - [x] Identified Flask as primary framework.
