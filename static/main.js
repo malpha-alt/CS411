@@ -10,6 +10,9 @@ function initMap() {
         
     ];
 
+    //Custom icons. Will eventually be an icon with the accounts profile picture (maybe)
+    const customIcon = 'https://cdn.discordapp.com/attachments/1005329675289112589/1227503753582874734/2_2_Small.png?ex=6628a4f4&is=66162ff4&hm=62ffdb2ce0ae04ff07cbf84eb3a7b5e53ada5e87efa33d9f4afd70f87e1a75f0&'
+
     const centerMap = { lat: 42.31435, lng: -70.970284} //Centers on boston
     
     const mapOptions = {
@@ -20,50 +23,33 @@ function initMap() {
 
     const map = new google.maps.Map(document.getElementById("google-map"), mapOptions) // Creates map
         
+    const infoWindow = new google.maps.InfoWindow({
+        minWidth: 200,
+        maxWidth: 200
+    })
+
     for(let x = 0; x < markers.length; x++) { // Loops through the markers object and displays all markers
         const marker = new google.maps.Marker({
             position: {lat:markers[0]['lat'], lng: markers[0]['lng']},
-            map: map
+            map: map,
+            icon: customIcon
         });
-    }   
-}
-    /*
-    // Initialize and add the map
-            function initMap() {
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: -34.397, lng: 150.644 },
-                zoom: 6,
-            });
-            infoWindow = new google.maps.InfoWindow();
 
-            const locationButton = document.createElement("button");
-
-            locationButton.textContent = "Pan to Current Location";
-            locationButton.classList.add("custom-map-control-button");
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-            locationButton.addEventListener("click", () => {
-                // Try HTML5 geolocation.
-                if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
-
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent("Location found.");
-                    infoWindow.open(map);
-                    map.setCenter(pos);
-                    },
-                    () => {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                    },
-                );
-                } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow, map.getCenter());
-                }
+        function createInfoWindows() {
+            const infoWindowContent = `
+                <div class="feh-content">
+                    <h3>${markers[x]['locationName']}</h3>
+                    <address> 
+                        <p>${markers[x]['address']}</p>
+                    </address>
+                </div>
+            `;
+            google.maps.event.addListener(marker, 'click', function() {
+                infoWindow.setContent(infoWindowContent);
+                infoWindow.open(map, marker);
             });
         }
-            } */
+        createInfoWindows();
+        
+    }   
+}
