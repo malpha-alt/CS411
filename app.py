@@ -16,7 +16,7 @@ def testApi():
     '''if form.validate_on_submit():
         name = form.ids.data  # Retrieve user input'''
 
-    api_key = "wTfSxrRhdui7T5-UixKi2Kx6882zePogIG6D"
+    api_key = "key"
     headers = {
         "x-api-key": api_key,
         "Accept": "application/json"
@@ -38,18 +38,25 @@ def testApi():
         if item.get("artist").get("name") == requestName and \
             item.get("venue").get("city").get("name") == requestCity and \
             item.get("eventDate") == requestDate:
-            artist_name = item.get("artist").get("name")
+            artist_name = item.get("artist").get("name") + '<br>'
+
+            venue_coords = item.get("venue").get("city").get("coords")
+            lat = venue_coords.get("lat")
+            long = venue_coords.get("long")
+
         else:
             return("Invalid Parameters")
         
         setlist = ""
+        iter = 0
         for song_set in item.get("sets").get("set"):
             for song in song_set.get("song"):
-                setlist += song.get("name") + "\n"
+                iter += 1
+                setlist += str(iter) + '. ' + song.get("name") + '<br>'
 
-    artistSearch_text += 'Artist Name: ' + artist_name + '<br>' + '\n' + setlist
+    artistSearch_text += 'Artist Name: ' + artist_name + '<br>' + setlist + '<br>' + "Lat: " + str(lat) + '<br>' "long: " + str(long)
         
-    return render_template('map.html', artistSearch_text=artistSearch_text)
+    return artistSearch_text
 
 class SearchForm(FlaskForm):
     ids = StringField("ID",validators=[DataRequired()])
