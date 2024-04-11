@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html>
-<form id="form" method="POST">
-    {{ form.csrf_token }}
-    <input type="search" id="query" name="q" placeholder="Search...">
-    <button type="submit">Search</button>
-</form>
+    <style>
+        .top-left {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .top-middle {
+            position: absolute;
+            top: 10px;
+            left: 250px 
+        }
+    </style>
+    <body>
+        <form id="form" method="POST" class="top-middle">
+            {{ form.csrf_token }}
+            <input type="search" id="query" name="q" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        <a href="/" class="top-left">
+            <button>Go to map page</button>
+        </a>
+    </body>
 </html>
 

@@ -18,23 +18,27 @@
             }
             #google-map {
                 border: 1px solid #ccc;
-                width: 700px;
-                height: 500px;
+                width: 90%;
+                height: 90%;
                 align-self: center;
                 margin: 0 auto;
+            }
+            .top-left {
+                position: absolute;
+                top: 10px;
+                left: 10px;
             }
         </style>
     </head>
     
     <body>
-    
-        <!--The div element for the map -->
-        <div id="google-map">
+        <a href="/search" class="top-left">
+            <button>Go to search page</button>
+        </a>
+        <div id="google-map"></div>
 
-        </div>
 
     </body>
-        <!--Add a script by google -->
     <script defer src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCc0qmMyZVsQL6MdyhvHIUp_k3rE0BIq0Q&callback=initMap"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script> <! --Calls the js file from the static directory-->
     
