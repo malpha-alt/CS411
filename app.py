@@ -16,7 +16,7 @@ def testApi():
     '''if form.validate_on_submit():
         name = form.ids.data  # Retrieve user input'''
 
-    api_key = "wTfSxrRhdui7T5-UixKi2Kx6882zePogIG6D"
+    api_key = "key"
     headers = {
         "x-api-key": api_key,
         "Accept": "application/json"
@@ -38,7 +38,7 @@ def testApi():
         if item.get("artist").get("name") == requestName and \
             item.get("venue").get("city").get("name") == requestCity and \
             item.get("eventDate") == requestDate:
-            artist_name = item.get("artist").get("name")
+            artist_name = item.get("artist").get("name") + '<br>'
 
             venue_coords = item.get("venue").get("city").get("coords")
             lat = venue_coords.get("lat")
