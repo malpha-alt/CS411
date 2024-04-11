@@ -16,21 +16,40 @@ def testApi():
     '''if form.validate_on_submit():
         name = form.ids.data  # Retrieve user input'''
 
-    api_key = "KEY"
+    api_key = "wTfSxrRhdui7T5-UixKi2Kx6882zePogIG6D"
     headers = {
         "x-api-key": api_key,
         "Accept": "application/json"
     }
-    query_params = {"artistName": "The Beatles"}  # Use the user input here
-    endpoint = "https://api.setlist.fm/rest/1.0/search/artists"
+
+    query_params = {"artistName": "The Beatles",
+                    "city": "Boston",
+                    "date": "18-08-1966"}  # Use the user input here
+    
+    requestName = query_params['artistName']
+    requestCity = query_params['city']
+    requestDate = query_params['date']
+
+    endpoint = "https://api.setlist.fm/rest/1.0/search/setlists"
     response = requests.get(endpoint, params=query_params, headers=headers).json()
+ 
     artistSearch_text = ""
-    iter = 1
-    for item in response.get("artist"):
-        artist_name = item.get("name")
-        artistSearch_text += str(iter) +'. Artist Name: ' + artist_name + '<br>'
-        iter += 1
-    return render_template('map.html')
+    for item in response.get("setlist"):
+        if item.get("artist").get("name") == requestName and \
+            item.get("venue").get("city").get("name") == requestCity and \
+            item.get("eventDate") == requestDate:
+            artist_name = item.get("artist").get("name")
+        else:
+            return("Invalid Parameters")
+        
+        setlist = ""
+        for song_set in item.get("sets").get("set"):
+            for song in song_set.get("song"):
+                setlist += song.get("name") + "\n"
+
+    artistSearch_text += 'Artist Name: ' + artist_name + '<br>' + '\n' + setlist
+        
+    return render_template('map.html', artistSearch_text=artistSearch_text)
 
 class SearchForm(FlaskForm):
     ids = StringField("ID",validators=[DataRequired()])
@@ -39,5 +58,5 @@ class SearchForm(FlaskForm):
 
 if __name__ == "__main__":
     # to run me from the command line: <flask --app main run> or <python app.py>
-    #                             
+    #
     app.run(host='0.0.0.0', port=5000, debug=True)
