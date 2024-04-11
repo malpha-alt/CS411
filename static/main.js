@@ -10,7 +10,7 @@ function initMap() {
         
     ];
 
-    //Custom icons. Will eventually be an icon with the accounts profile picture (maybe)
+    //Custom icons. Will eventually be an icon with the accounts profile picture. Another idea is having an arena icon that gets bigger the more its visited
     const customIcon = 'https://cdn.discordapp.com/attachments/1005329675289112589/1227503753582874734/2_2_Small.png?ex=6628a4f4&is=66162ff4&hm=62ffdb2ce0ae04ff07cbf84eb3a7b5e53ada5e87efa33d9f4afd70f87e1a75f0&'
 
     const centerMap = { lat: 42.31435, lng: -70.970284} //Centers on boston
