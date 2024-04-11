@@ -8,19 +8,30 @@
         }
         .top-middle {
             position: absolute;
-            top: 10px;
-            left: 250px 
+            top: 50px;
+            left: 10px 
+        }
+        .search-results {
+            position: absolute;
+            top: 100px;
+            left: 10px 
         }
     </style>
     <body>
-        <form id="form" method="POST" class="top-middle">
-            {{ form.csrf_token }}
-            <input type="search" id="query" name="q" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
         <a href="/" class="top-left">
             <button>Go to map page</button>
         </a>
+        <form id="form" method="POST" class="top-middle">
+            {{ form.csrf_token }}
+            <input type="search" id="query" name="query" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        <div class="search-results">
+            {% for result in results %}
+                <a href="/">{{ result.title }}</a> <! --Displays all the search results as clickable items -->
+                <hr>
+            {% endfor %}
+        </div>
     </body>
 </html>
 
