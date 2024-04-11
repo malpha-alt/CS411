@@ -1,6 +1,6 @@
-from flask import *
-from flask_wtf import *
-from wtforms import *
+from flask import Flask, render_template
+from flask_wtf import * # type: ignore
+from wtforms import * # type: ignore
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 import requests
