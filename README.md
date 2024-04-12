@@ -12,7 +12,7 @@
 
 ## Launch Instructions
 
-Install required dependencies using command:
+clone and install required dependencies using command:
 ```shell
 git clone git@github.com:malpha-alt/CS411.git
 cd cs411/
