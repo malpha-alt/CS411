@@ -1,14 +1,26 @@
 function initMap() {
+    var markers = [] // Used to create markers. Eventually will recieve the locatios from the set lists
 
-    const markers = [ // Used to create markers. Eventually will recieve the locatios from the set lists
-        {
-            locationName: 'TD Garden',
-            lat: 42.366847947342926, 
-            lng: -71.06218814804988,
-            address: '100 Legends Way,<br> Boston,<br> MA 02114'
+                /*locationName: 'TD Garden',
+                lat: 42.366847947342926, 
+                lng: -71.06218814804988,
+                address: '100 Legends Way,<br> Boston,<br> MA 02114'*/
+
+    function createMarkers(M) {
+        for(let x = 0; x < M.length; x++) {
+            let marker = {
+                LocationName: M[x][2],  // Assuming venue is at index 3
+                lat: M[x][4],  // Assuming lat is at index 5
+                lng: M[x][5],  // Assuming long is at index 6
+                artist: M[x][0],
+                concertDate: M[x][1]
+            };
+            markers.push(marker);
         }
-        
-    ];
+    }
+    
+    markers = createMarkers()
+    
 
     //Custom icons. Will eventually be an icon with the accounts profile picture. Another idea is having an arena icon that gets bigger the more its visited
     const customIcon = 'https://cdn.discordapp.com/attachments/1005329675289112589/1227503753582874734/2_2_Small.png?ex=6628a4f4&is=66162ff4&hm=62ffdb2ce0ae04ff07cbf84eb3a7b5e53ada5e87efa33d9f4afd70f87e1a75f0&'
@@ -71,37 +83,37 @@ function initMap() {
         {
             featureType: "road",
             elementType: "geometry",
-            stylers: [{ color: "#f5f1e6" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "road.arterial",
             elementType: "geometry",
-            stylers: [{ color: "#fdfcf8" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "road.highway",
             elementType: "geometry",
-            stylers: [{ color: "#f8c967" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "road.highway",
             elementType: "geometry.stroke",
-            stylers: [{ color: "#e9bc62" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "road.highway.controlled_access",
             elementType: "geometry",
-            stylers: [{ color: "#e98d58" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "road.highway.controlled_access",
             elementType: "geometry.stroke",
-            stylers: [{ color: "#db8555" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "road.local",
             elementType: "labels.text.fill",
-            stylers: [{ color: "#806b63" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "transit.line",
@@ -111,12 +123,12 @@ function initMap() {
         {
             featureType: "transit.line",
             elementType: "labels.text.fill",
-            stylers: [{ color: "#8f7d77" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "transit.line",
             elementType: "labels.text.stroke",
-            stylers: [{ color: "#ebe3cd" }],
+            stylers: [{ color: "#dfd2ae" }],
         },
         {
             featureType: "transit.station",
@@ -163,7 +175,7 @@ function initMap() {
 
     for(let x = 0; x < markers.length; x++) { // Loops through the markers object and displays all markers
         const marker = new google.maps.Marker({
-            position: {lat:markers[0]['lat'], lng: markers[0]['lng']},
+            position: {lat:markers[x]['lat'], lng: markers[x]['lng']},
             map: map,
             icon: customIcon
         });
@@ -173,7 +185,8 @@ function initMap() {
                 <div class="feh-content">
                     <h3>${markers[x]['locationName']}</h3>
                     <address> 
-                        <p>${markers[x]['address']}</p>
+                        <p>${markers[x]['artist']}<hr>
+                            ${markers[x]['concertDate']}</p>
                     </address>
                 </div>
             `;
