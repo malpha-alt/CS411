@@ -31,12 +31,14 @@
         <a href="/" class="top-left">
             <button>Go to map page</button>
         </a>
+
         <form id="form" method="POST" class="top-middle">
             {{ form.csrf_token }}
             <input type="search" id="query" name="query" placeholder="Artist...">
             {{ form.date }}
             <button type="submit">Search</button>
         </form>
+        
         {% if results is none %}
             <script>
             function showAlert() {
@@ -50,27 +52,32 @@
         {% else %}
             <div class="search-results">
                 {% for result in results %}
-                <a href="#" onclick="addArtists('{{ result.artist }}', '{{ result.date }}', '{{ result.venue }}', '{{ result.city }}, {{ result.lat}}, {{ result.long }}')">
-                    {{ result.artist }} {{ result.date }} {{ result.venue }} {{ result.city }} {{ result.lat }} {{ result.long }}
+                <a href="#" onclick="addConcert('{{ result.artist }}', '{{ result.date }}', '{{ result.venue }}', '{{ result.city }}', '{{ result.lat }}', '{{ result.lng }}')">
+                    {{ result.artist }} {{ result.date }} {{ result.venue }} {{ result.city }} {{ result.lat }} {{ result.lng }}
                 </a> <! --Displays all the search results as clickable items -->
                 <hr>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <a href="#" onclick="event.preventDefault(); displayArtists()" class="top-right">
-            <button>Display artists</button>
-        </a>
         <div id="artistList" class="added-results"></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-            // Define selectedResult outside of the handleClick function
-            var selectedResult = [];
-
-            function addArtists(artist, date, venue, city, lat, long) {
+            function addConcert(artist, date, venue, city, lat, lng) { // Adds a concert to a server side variable
                 alert('You clicked on ' + artist);
-                selectedResult.push({artist,date,venue,city, lat, long});
+                selectedResult = [{artist, date, venue, city, lat, lng}];
+                $.ajax({
+                    url: '/storedata',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(selectedResult),
+                    success: function() {
+                        console.log("Data stored successfully");
+                    }
+                });
             }
-            function displayArtists() {
+
+            /*function displayArtists() { NOT NEEDED ANYMORE
                 let html = '';
                 // Loop through the selectedResult array
                 for (let x = 0; x < selectedResult.length; x++) {
@@ -80,12 +87,15 @@
                             selectedResult[x].venue + ', ' + 
                             selectedResult[x].city + ', ' +
                             selectedResult[x].lat + ', ' + 
-                            selectedResult[x].long;
+                            selectedResult[x].lng;
                     html += '<hr>'
                 }
 
                 document.getElementById('artistList').innerHTML = html;
             }
+            <a href="#" onclick="event.preventDefault(); displayArtists()" class="top-right">
+            <button>Display artists</button>
+            </a>*/
         </script>
     </body>
 </html>
