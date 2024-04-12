@@ -3,11 +3,14 @@ from flask_wtf import FlaskForm
 from wtforms import * # type: ignore
 from wtforms.validators import DataRequired
 from datetime import datetime
+from dotenv import load_dotenv
 import os
 import requests
 
+
 googleMapsTest = Flask(__name__)
 googleMapsTest.config['SECRET_KEY'] = os.urandom(32)
+load_dotenv()
 
 @googleMapsTest.route('/', methods=['GET', 'POST'])
 def testApi():
@@ -20,7 +23,7 @@ def search():
     date = request.form.get('date')
     
     results = []
-    api_key = "KEY"
+    api_key = os.getenv('SETLIST_API_KEY')
     headers = {
         "x-api-key": api_key,
         "Accept": "application/json"
