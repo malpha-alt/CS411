@@ -39,7 +39,10 @@
         </a>
 
     </body>
-    <script defer src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCc0qmMyZVsQL6MdyhvHIUp_k3rE0BIq0Q&callback=initMap"></script>
+    <script id = "mapCall" defer src = "{{ mapCall }}"></script>
+    <script id = "concertList"> 
+        window.concertList = {{ concertList | tojson }};
+    </script>
     <script src="{{ url_for('static', filename='main.js') }}"></script> <! --Calls the js file from the static directory-->
     
     
