@@ -11,10 +11,20 @@
             top: 50px;
             left: 10px 
         }
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
         .search-results {
             position: absolute;
             top: 100px;
             left: 10px 
+        }
+        .added-results {
+            position: absolute;
+            top: 100px;
+            right: 10px;
         }
     </style>
     <body>
@@ -23,15 +33,60 @@
         </a>
         <form id="form" method="POST" class="top-middle">
             {{ form.csrf_token }}
-            <input type="search" id="query" name="query" placeholder="Search...">
+            <input type="search" id="query" name="query" placeholder="Artist...">
+            {{ form.date }}
             <button type="submit">Search</button>
         </form>
-        <div class="search-results">
-            {% for result in results %}
-                <a href="/">{{ result.title }}</a> <! --Displays all the search results as clickable items -->
+        {% if results is none %}
+            <script>
+            function showAlert() {
+                event.preventDefault();  // This will prevent the default action
+                alert('No results found');
+            }
+            window.onload = function() {
+                showAlert();
+            }
+            </script>
+        {% else %}
+            <div class="search-results">
+                {% for result in results %}
+                <a href="#" onclick="addArtists('{{ result.artist }}', '{{ result.date }}', '{{ result.venue }}', '{{ result.city }}, {{ result.lat}}, {{ result.long }}')">
+                    {{ result.artist }} {{ result.date }} {{ result.venue }} {{ result.city }} {{ result.lat }} {{ result.long }}
+                </a> <! --Displays all the search results as clickable items -->
                 <hr>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <a href="#" onclick="event.preventDefault(); displayArtists()" class="top-right">
+            <button>Display artists</button>
+        </a>
+        <div id="artistList" class="added-results"></div>
+        <script>
+            // Define selectedResult outside of the handleClick function
+            var selectedResult = [];
+
+            function addArtists(artist, date, venue, city, lat, long) {
+                alert('You clicked on ' + artist);
+                selectedResult.push({artist,date,venue,city, lat, long});
+            }
+            function displayArtists() {
+                let html = '';
+                // Loop through the selectedResult array
+                for (let x = 0; x < selectedResult.length; x++) {
+                    // Add to the html string
+                    html += selectedResult[x].artist + ', ' + 
+                            selectedResult[x].date + ', ' + 
+                            selectedResult[x].venue + ', ' + 
+                            selectedResult[x].city + ', ' +
+                            selectedResult[x].lat + ', ' + 
+                            selectedResult[x].long;
+                    html += '<hr>'
+                }
+
+                document.getElementById('artistList').innerHTML = html;
+            }
+        </script>
     </body>
 </html>
 
