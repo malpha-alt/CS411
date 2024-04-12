@@ -6,17 +6,31 @@
 * Brian Choi
 
 ## Alpha milestone - 4/12
-  - [ ] Video demonstration of progress
-  - [ ] Code snapshot
-  - [ ] Updated README for launch/build instructions
+  - [x] Video demonstration of progress
+        Alpha Video: https://youtu.be/G-iT29oSomQ
+  - [x] Code snapshot
+  - [x] Updated README for launch/build instructions
 
 ## Launch Instructions
 
 clone and install required dependencies using command:
-```shell
+```shell for OAuth test
 git clone git@github.com:malpha-alt/CS411.git
 cd cs411/
 pip -r install requirements.txt
+```
+clone and install required dependencies for googleMapsTest.py:
+```
+git clone git@github.com:malpha-alt/CS411.git
+cd cs411/
+pip install flask
+pip install flask_wtf
+pip install wtforms
+pip install wtforms.validators
+pip install datetime
+pip install dotenv
+pip install os
+pip install requests
 ```
 
 To run the application, use the command:
