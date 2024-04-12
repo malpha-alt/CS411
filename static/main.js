@@ -1,33 +1,30 @@
 function initMap() {
-    var markers = [] // Used to create markers. Eventually will recieve the locatios from the set lists
+    var concertList = window.concertList; // Used to create markers. Eventually will recieve the locatios from the set lists
+    console.log(concertList);
 
-                /*locationName: 'TD Garden',
-                lat: 42.366847947342926, 
-                lng: -71.06218814804988,
-                address: '100 Legends Way,<br> Boston,<br> MA 02114'*/
-
+    var markers = []
     function createMarkers(M) {
         for(let x = 0; x < M.length; x++) {
             let marker = {
-                LocationName: M[x][2],  // Assuming venue is at index 3
-                lat: M[x][4],  // Assuming lat is at index 5
-                lng: M[x][5],  // Assuming long is at index 6
-                artist: M[x][0],
-                concertDate: M[x][1]
+                venue: M[x]['venue'],
+                lat: parseFloat(M[x]['lat']),
+                lng: parseFloat(M[x]['lng']),
+                artist: M[x]['artist'],
+                concertDate: M[x]['date']
             };
             markers.push(marker);
         }
     }
-    
-    markers = createMarkers()
+    createMarkers(concertList)
+    console.log(markers)
     
 
     //Custom icons. Will eventually be an icon with the accounts profile picture. Another idea is having an arena icon that gets bigger the more its visited
-    const customIcon = 'https://cdn.discordapp.com/attachments/1005329675289112589/1227503753582874734/2_2_Small.png?ex=6628a4f4&is=66162ff4&hm=62ffdb2ce0ae04ff07cbf84eb3a7b5e53ada5e87efa33d9f4afd70f87e1a75f0&'
+    //const customIcon = 'https://cdn.discordapp.com/attachments/1005329675289112589/1227503753582874734/2_2_Small.png?ex=6628a4f4&is=66162ff4&hm=62ffdb2ce0ae04ff07cbf84eb3a7b5e53ada5e87efa33d9f4afd70f87e1a75f0&'
 
     const centerMap = { lat: 42.31435, lng: -70.970284} //Centers on boston
     
-    const mapOptions = {
+    const mapOptions = { //All map options
         center: centerMap,
         zoom: 10,
         disableDefaultUI: true,
@@ -35,7 +32,7 @@ function initMap() {
         mapTypeId: "styled_map"
     }
 
-    const styledMapType = new google.maps.StyledMapType(
+    const styledMapType = new google.maps.StyledMapType( //Styled map
         [
         { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
         { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
@@ -177,16 +174,14 @@ function initMap() {
         const marker = new google.maps.Marker({
             position: {lat:markers[x]['lat'], lng: markers[x]['lng']},
             map: map,
-            icon: customIcon
         });
 
         function createInfoWindows() {
             const infoWindowContent = `
                 <div class="feh-content">
-                    <h3>${markers[x]['locationName']}</h3>
+                    <h3>${markers[x]['venue']}</h3>
                     <address> 
-                        <p>${markers[x]['artist']}<hr>
-                            ${markers[x]['concertDate']}</p>
+                        <p>${markers[x]['artist']}: ${markers[x]['concertDate']}</p>
                     </address>
                 </div>
             `;
