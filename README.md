@@ -29,6 +29,7 @@ python3 -m venv .venv  (windows: "py -3 -m venv .venv")
 . .venv/bin/activate   (windows: "source .venv/Scripts/activate")
 pip install --upgrade pip (windows: "py -m pip install --upgrade pip")
 pip install -r "requirements.txt"
+paste in .env file
 ```
 
 To run the application, use the command:
