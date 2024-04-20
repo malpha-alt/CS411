@@ -38,23 +38,13 @@ mysql.init_app(app)
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
-conn = mysql.connect()
-cursor = conn.cursor()
+# conn = mysql.connect()
+# cursor = conn.cursor()
 
-def get_cursor():
-    conn = mysql.connect()
-    return conn.cursor()
-
-def commit():
-    conn.commit()
 
 @login_manager.user_loader
 def load_user(user_id):
      user = User.get(user_id)
-     if user:
-        print("Loaded user:", user)
-     else:
-        print("No user found with ID:", user_id)
      return user
 
 @app.route("/")
@@ -62,12 +52,10 @@ def index():
     #session.modified = True
     print('is authenticated:', current_user.is_authenticated)
     if current_user.is_authenticated:
-        conn = mysql.connect()
-        cursor = conn.cursor()
+        conn, cursor = db.get_cursor()
         cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (current_user.id,))
         user_searches = cursor.fetchall()
-        print("user_searches: ", user_searches)
-
+      
         concert_list = []
         for search in user_searches:
             results = json.loads(search[0])
@@ -81,8 +69,6 @@ def index():
         return render_template('login.html')
         #return '<a class="button" href="/auth/login">Google Login</a>'
         
-
-#concertList = []
 @app.route('/storedata', methods=['POST'])
 @login_required
 def storedata():
@@ -97,8 +83,7 @@ def storedata():
         search_data = json.dumps(data)
         print('json.dumps: ', search_data)
 
-        conn = mysql.connect()
-        cursor = conn.cursor()
+        conn, cursor = db.get_cursor()
         cursor.execute(
             "INSERT INTO UserSearches (userID, search_data) VALUES (%s, %s)",
             (user_id, search_data)
@@ -112,12 +97,6 @@ def storedata():
         app.logger.error(f"Error storing data: {str(e)}")  # Log the error
         return jsonify({'error': str(e)}), 500
 
-
-    # selected_result = request.get_json()
-    # concert_list = session.get('concertList', [])
-    # concert_list.append(selected_result[0])  # Assuming the JSON structure is correct
-    # session['concertList'] = concert_list
-    # return '', 200
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
