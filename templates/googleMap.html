@@ -29,6 +29,11 @@
                 top: 10px;
                 left: 10px;
             }
+            .top-right{
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
         </style>
     </head>
     
@@ -37,11 +42,14 @@
         <a href="/search" class="top-left">
             <button>Go to search page</button>
         </a>
+        <a href="/auth/logout" class="top-right">
+            <button>logout</button>
+        </a>
 
     </body>
     <script id = "mapCall" defer src = "{{ mapCall }}"></script>
-    <script id = "concertList"> 
-        window.concertList = {{ concertList | tojson }};
+    <script type="text/javascript" id = "concertList"> 
+        window.concertList = {{ concertList | tojson | safe }};
     </script>
     <script src="{{ url_for('static', filename='main.js') }}"></script> <! --Calls the js file from the static directory-->
     
