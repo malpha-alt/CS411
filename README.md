@@ -25,8 +25,8 @@
 ```
 git clone --branch Integration-Test git@github.com:malpha-alt/CS411.git
 cd CS411/
-python3 -m venv .venv  (or on windows: "py -3 -m venv .venv")
-. .venv/bin/activate   (or on windows:.venv\Scripts\activate)
+python3 -m venv .venv  (windows: "py -3 -m venv .venv")
+. .venv/bin/activate   (windows or bash: "source .venv/Scripts/activate")
 pip -r install requirements.txt
 ```
 
