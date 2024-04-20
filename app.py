@@ -78,8 +78,8 @@ def index():
         map_call = 'https://maps.googleapis.com/maps/api/js?key=' + os.getenv('GOOGLE_MAP_API') + '&callback=initMap'
         return render_template('googleMap.html', mapCall=map_call, concertList=concert_list)
     else:
-        #return render_template('login.html', form=form, results=results)
-        return '<a class="button" href="/auth/login">Google Login</a>'
+        return render_template('login.html')
+        #return '<a class="button" href="/auth/login">Google Login</a>'
         
 
 #concertList = []
