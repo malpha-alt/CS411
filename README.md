@@ -30,6 +30,7 @@ python3 -m venv .venv  (windows: "py -3 -m venv .venv")
 pip install --upgrade pip (windows: "py -m pip install --upgrade pip")
 pip install -r "requirements.txt"
 ```
+6. place .env file in directory
 
 To run the application, use the command:
 ```
