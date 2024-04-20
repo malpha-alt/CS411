@@ -2,12 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 40px; padding-bottom: 40px; background-color: #f5f5f5; }
+        .form-signin { max-width: 330px; padding: 15px; margin: auto; }
+        .form-signin .form-signin-heading, .form-signin .checkbox { margin-bottom: 10px; }
+        .form-signin .checkbox { font-weight: normal; }
+        .form-signin .form-control { position: relative; height: auto; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; padding: 10px; font-size: 16px; }
+        .form-signin .form-control:focus { z-index: 2; }
+        .form-signin input[type="email"], .form-signin input[type="password"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] { margin-bottom: 10px; }
+        .divider { margin: 20px 0; text-align: center; }
+        .signup-link { text-align: center; font-size: small; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Login To Concert Chronicles</h1>
-    
-    <a class="button" href="/auth/login">Google Login</a>
+    <div class="container">
+        <form class="form-signin" id="loginForm">
+            <h2 class="form-signin-heading">Welcome back! Please sign in</h2>
+            <label for="inputEmail">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <div class="divider"><hr></div>
+            <button class="btn btn-lg btn-danger btn-block" type="button" onclick="window.location.href='/auth/login';">Login with Google</button>
+            <div class="signup-link">
+                <a href="/auth/signup">Don't have an account? Sign up now!</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();  // Prevent form from submitting the traditional way
+                var email = $('#inputEmail').val();
+                var password = $('#inputPassword').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/auth/login_trad",
+                    contentType: "application/json",
+                    data: JSON.stringify({ email: email, password: password }),
+                    success: function(data) {
+                        if(data.success) {
+                            console.log("Succesfful login and shit")
+                            window.location.href = '/'; 
+                        } else {
+                            alert('Login failed!');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Login failed: ' + xhr.responseText);
+                     }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

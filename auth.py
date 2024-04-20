@@ -1,8 +1,10 @@
-from flask import Blueprint, redirect, request, url_for, session
+from flask import Blueprint, redirect, request, url_for, session, render_template, jsonify
 import requests
 from flask_login import login_user, logout_user, login_required
 from oauthlib.oauth2 import WebApplicationClient
 from user import User
+from db import get_cursor, commit, close_connection
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import json
 
@@ -28,6 +30,83 @@ def login():
     )
 
     return redirect(request_uri)
+
+# @auth_bp.route('login_trad', methods=['GET', 'POST'])
+# def login_trad():
+#     data = request.get_json(force=True)  # force=True can help if the mimetype is not set/application not detected
+#     if not data:
+#         return jsonify({'success': False, 'message': 'No data provided'}), 400
+
+#     email = data.get('email')
+#     password = data.get('password')
+#     if not email or not password:
+#         return jsonify({'success': False, 'message': 'Both email and password are required'}), 400
+
+#     user = get_user_by_email(email)
+#     if user and check_password_hash(user[4], password):
+#         print("succesfully found user and stuff")
+#         login_user(user, remember=True)
+#         return jsonify({'success': True, 'message': 'valid credentials'})
+#     else:
+#         return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+
+#     return jsonify({'success': False, 'message': 'Invalid request'}), 400 
+@auth_bp.route('/login_trad', methods=['POST'])
+def login_trad():
+    data = request.get_json()
+    if data:
+        email = data.get('email')
+        password = data.get('password')
+
+        user = get_user_by_email(email)
+        if user and check_password_hash(user.password_hash, password):
+            login_user(user, remember=True)
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+
+    return jsonify({'success': False, 'message': 'Invalid request'}), 400
+
+
+
+def get_user_by_email(email):
+    conn, cursor = get_cursor()
+    try:
+        cursor.execute("SELECT id, name, email, profile_pic, password_hash FROM User WHERE email = %s", (email,))
+        user_data = cursor.fetchone()
+        print("print user_data: ", user_data)
+        if user_data:
+            print(user_data[0], user_data[1], user_data[2], user_data[3], user_data[4])
+            return User(id_=user_data[0], name=user_data[1], email=user_data[2], profile_pic=user_data[3], password_hash=user_data[4])
+    except Exception as e:
+        print(f"Database error: {e}")
+        return None
+    finally:
+        close_connection(conn)
+
+
+
+
+
+@auth_bp.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        
+        hashed_password = generate_password_hash(password)
+
+        if not get_user_by_email(email):
+            if User.create_user(name, email, hashed_password):
+                print("Successfully created user!")
+                return redirect('/')
+        else:
+            print("Email already exists")
+            return render_template('auth/signup.html', error="Email already exists.")
+        
+    return render_template('signup.html')
+
 
 @auth_bp.route('/login/callback')
 def callback():
@@ -75,4 +154,5 @@ def callback():
 @login_required
 def logout():
     logout_user()
+    session.clear()
     return redirect('/')
