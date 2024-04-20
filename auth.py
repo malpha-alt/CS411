@@ -31,26 +31,6 @@ def login():
 
     return redirect(request_uri)
 
-# @auth_bp.route('login_trad', methods=['GET', 'POST'])
-# def login_trad():
-#     data = request.get_json(force=True)  # force=True can help if the mimetype is not set/application not detected
-#     if not data:
-#         return jsonify({'success': False, 'message': 'No data provided'}), 400
-
-#     email = data.get('email')
-#     password = data.get('password')
-#     if not email or not password:
-#         return jsonify({'success': False, 'message': 'Both email and password are required'}), 400
-
-#     user = get_user_by_email(email)
-#     if user and check_password_hash(user[4], password):
-#         print("succesfully found user and stuff")
-#         login_user(user, remember=True)
-#         return jsonify({'success': True, 'message': 'valid credentials'})
-#     else:
-#         return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
-
-#     return jsonify({'success': False, 'message': 'Invalid request'}), 400 
 @auth_bp.route('/login_trad', methods=['POST'])
 def login_trad():
     data = request.get_json()
@@ -67,8 +47,6 @@ def login_trad():
 
     return jsonify({'success': False, 'message': 'Invalid request'}), 400
 
-
-
 def get_user_by_email(email):
     conn, cursor = get_cursor()
     try:
@@ -83,10 +61,6 @@ def get_user_by_email(email):
         return None
     finally:
         close_connection(conn)
-
-
-
-
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -104,9 +78,7 @@ def signup():
         else:
             print("Email already exists")
             return render_template('auth/signup.html', error="Email already exists.")
-        
     return render_template('signup.html')
-
 
 @auth_bp.route('/login/callback')
 def callback():
@@ -140,10 +112,10 @@ def callback():
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["given_name"]
 
-        user = User(id_=unique_id, name=users_name, email=users_email, profile_pic=picture)
+        user = User(id_=unique_id, name=users_name, email=users_email, profile_pic=picture, password_hash=None)
         print(user, " trying to log in")
         if not User.get(unique_id):
-            User.create(unique_id, users_name, users_email, picture)
+            User.create(unique_id, users_name, users_email, picture, None)
         login_user(user)
 
         return redirect(url_for("index"))
@@ -155,4 +127,5 @@ def callback():
 def logout():
     logout_user()
     session.clear()
-    return redirect('/')
+    print("Session keys after logout:", session.keys()) # should be empty if we logged out and shit
+    return redirect('/landing')

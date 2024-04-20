@@ -30,13 +30,13 @@ class User(UserMixin):
             db.close_connection(conn)
 
     @staticmethod
-    def create(id_, name, email, profile_pic):
+    def create(id_, name, email, profile_pic, password_hash):
         conn, cursor = db.get_cursor()
-        print("Creating user:", id_, name, email, profile_pic)
+        print("Creating user:", id_, name, email, profile_pic, password_hash)
         try:
-            cursor.execute("INSERT INTO user (id, name, email, profile_pic) VALUES (%s, %s, %s, %s)", (id_, name, email, profile_pic))
+            cursor.execute("INSERT INTO user (id, name, email, profile_pic, password_hash) VALUES (%s, %s, %s, %s, %s)", (id_, name, email, profile_pic, password_hash))
             db.commit(conn)
-            print("Created user:", id_, name, email, profile_pic)
+            print("Created user:", id_, name, email, profile_pic, password_hash)
         except Exception as e:
             print("Failed to insert user:", e)
             raise

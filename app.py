@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DateField, HiddenField
 from wtforms.validators import DataRequired
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
 from auth import auth_bp
@@ -26,30 +26,32 @@ headers = {
         "Accept": "application/json"
 }
 
-
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
 app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER', 'root')
 app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD', 'root')
 app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB', 'Showrunner')
 app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST', 'localhost')
 
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=0)  # Immediately expire
+
+
 mysql = MySQL()
 mysql.init_app(app)
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
-# conn = mysql.connect()
-# cursor = conn.cursor()
-
 
 @login_manager.user_loader
 def load_user(user_id):
      user = User.get(user_id)
      return user
 
+@app.route("/landing")
+def landing():
+    return render_template('login.html')
+
 @app.route("/")
 def index():
-    #session.modified = True
     print('is authenticated:', current_user.is_authenticated)
     if current_user.is_authenticated:
         conn, cursor = db.get_cursor()
@@ -67,7 +69,6 @@ def index():
         return render_template('googleMap.html', mapCall=map_call, concertList=concert_list)
     else:
         return render_template('login.html')
-        #return '<a class="button" href="/auth/login">Google Login</a>'
         
 @app.route('/storedata', methods=['POST'])
 @login_required
