@@ -12,10 +12,12 @@ from auth import auth_bp
 from user import User
 import requests
 import json
+import db
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
+db.init_app(app)
 app.register_blueprint(auth_bp, url_prefix='/auth')
 load_dotenv() 
 api_key = os.getenv('SETLIST_API_KEY')
@@ -35,18 +37,29 @@ mysql = MySQL()
 mysql.init_app(app)
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+conn = mysql.connect()
+cursor = conn.cursor()
 
 def get_cursor():
     conn = mysql.connect()
     return conn.cursor()
 
+def commit():
+    conn.commit()
+
 @login_manager.user_loader
 def load_user(user_id):
-     return User.get(user_id)
+     user = User.get(user_id)
+     if user:
+        print("Loaded user:", user)
+     else:
+        print("No user found with ID:", user_id)
+     return user
 
 @app.route("/")
 def index():
-    session.modified = True
+    #session.modified = True
     print('is authenticated:', current_user.is_authenticated)
     if current_user.is_authenticated:
         conn = mysql.connect()

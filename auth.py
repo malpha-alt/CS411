@@ -62,6 +62,7 @@ def callback():
         users_name = userinfo_response.json()["given_name"]
 
         user = User(id_=unique_id, name=users_name, email=users_email, profile_pic=picture)
+        print(user, " trying to log in")
         if not User.get(unique_id):
             User.create(unique_id, users_name, users_email, picture)
         login_user(user)
