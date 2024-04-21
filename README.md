@@ -13,28 +13,27 @@
 
 ## Launch Instructions
 
-clone and install required dependencies using command:
-```shell for OAuth test
-git clone git@github.com:malpha-alt/CS411.git
-cd cs411/
-pip -r install requirements.txt
+1. Install MySQL Workbench https://dev.mysql.com/downloads/workbench/
+
+2. Install MySQL Server https://dev.mysql.com/downloads/mysql/
+
+3. Setup a New Connection (e.g: Hostname: "127.0.0.1", Port: 3306, username: "root", Password: \<your MySQL password\>)
+
+4. Initialize the database by executing the query in "schema.sql"
+
+5. Clone repository, install virtual environment and required dependencies using command:
 ```
-clone and install required dependencies for googleMapsTest.py:
+git clone --branch Integration-Test git@github.com:malpha-alt/CS411.git
+cd CS411/
+python3 -m venv .venv  (windows: "py -3 -m venv .venv")
+. .venv/bin/activate   (windows: "source .venv/Scripts/activate")
+pip install --upgrade pip (windows: "py -m pip install --upgrade pip")
+pip install -r "requirements.txt"
 ```
-git clone git@github.com:malpha-alt/CS411.git
-cd cs411/
-pip install flask
-pip install flask_wtf
-pip install wtforms
-pip install wtforms.validators
-pip install datetime
-pip install dotenv
-pip install os
-pip install requests
-```
+6. place .env file in directory
 
 To run the application, use the command:
-```shell
+```
 python -m flask run
 ```
 
