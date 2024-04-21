@@ -136,5 +136,5 @@ def callback():
 def logout():
     logout_user()
     session.clear()
-    print("Session keys after logout:", session.keys()) # should be empty if we logged out and shit
+    print("Session keys after logout:", session.keys()) 
     return redirect('/displayLogin')
