@@ -126,7 +126,7 @@ def callback():
             User.create(unique_id, users_name, users_email, picture, None)
         login_user(user)
 
-        return redirect(url_for("index"))
+        return redirect(url_for("map"))
     else:
         return "User email not available or not verified by Google.", 400
 
