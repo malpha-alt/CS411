@@ -1,0 +1,40 @@
+<head>
+  {% if msg %}
+  <h4>{{msg}}!</h4>
+  {% endif %}
+  <title>Add a friend</title>
+</head>
+
+<body>
+  <div class="title">
+    <h1>Your friends!</h1>
+  </div>
+  <form method="post" action="/friends">
+    <label for="search">Add a friend by their email:</label>
+    <input type="email" name="friends" required='true' /><br />
+    <input type="submit" value="Add friend!" />
+  </form>
+
+  <h2>Current Friends:</h2>
+  {% if friends %}
+  <ul>
+    {% for friends in friends %}
+    Name: {{friends[0]}}<br>
+    Email: {{friends[1]}}<br>
+    <br>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h2>Recommended Friends:</h2>
+  {% if recs %}
+  <ul>
+    {% for recs in recs %}
+    Name: {{recs[0]}}<br>
+    Email: {{recs[1]}}<br>
+    <br>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <a href='/'>Home</a>
+</body>

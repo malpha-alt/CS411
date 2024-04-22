@@ -22,6 +22,7 @@ load_dotenv() #Loads the .env file
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
 
+
 #Retrieves database information
 app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER')
 app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
@@ -30,6 +31,8 @@ app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST')
 
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=0)  # Immediately expire
 
+
+
 #Connects to mysql
 mysql = MySQL()
 mysql.init_app(app)
@@ -37,10 +40,113 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login' # type: ignore
 
+
+#Functions for getting emails/ids
+def getUserIdFromEmail(email):
+    conn, cursor = db.get_cursor()
+    cursor.execute(
+        "SELECT id FROM User WHERE email = '{0}'".format(email))
+    return cursor.fetchone()[0]
+
+def getUsersFriends(uid):
+    conn, cursor = db.get_cursor()
+    cursor.execute("SELECT id2 FROM Friends WHERE id1 = '{0}'".format(uid))
+    return cursor.fetchall()
+
+def isFriendsWith(uid, uid2):
+    conn, cursor = db.get_cursor()
+    print(uid)
+    print(uid2)
+    if cursor.execute("SELECT id2 FROM Friends WHERE id1 = {0} AND id2 = {1}".format(uid, uid2)):
+        print(cursor.execute("SELECT id2 FROM Friends WHERE id1 = {0} AND id2 = {1}".format(uid, uid2)))
+        return True
+    else:
+        return False
+
+def getFirstNameFromId(id):
+    conn, cursor = db.get_cursor()
+    cursor.execute(
+        "SELECT name  FROM User WHERE id = '{0}'".format(id))
+    return cursor.fetchone()[0]
+
+def getEmailFromId(id):
+    conn, cursor = db.get_cursor()
+    cursor.execute(
+        "SELECT email FROM User WHERE id = '{0}'".format(id))
+    return cursor.fetchone()[0]
+
+def friendTuple(uid):
+    friendIds = getUsersFriends(uid)
+    friends = []
+    for i in friendIds:
+        friends.append((getFirstNameFromId(i[0]), getEmailFromId(i[0]), i[0]))
+    return friends
+
+def friendRecs(uid):
+    friends = friendTuple(uid)
+    #adds current user to friends list so the user isn't recommended to themself
+    friends.append((getFirstNameFromId(uid), getEmailFromId(uid), uid))
+    friendsOfFriends = set()
+    for i in range(len(friends)):
+        friendsOfCurrentUser = friendTuple(friends[i][2])
+        for x in range(len(friendsOfCurrentUser)):
+            friendsOfFriends.add(friendsOfCurrentUser[x])
+    friends = set(friends)
+    final = friendsOfFriends.difference(friends)
+    return list(final)
+
+def isEmailUnique(email):
+    # use this to check if a email has already been registered
+    conn, cursor = db.get_cursor()
+    if cursor.execute("SELECT email FROM User WHERE email = '{0}'".format(email)):
+        # this means there are greater than zero entries with that email
+        cursor.close()
+        conn.close()
+        return False
+    else:
+        cursor.close()
+        conn.close()
+        return True
+
+#Friend routes
+@app.route("/friends", methods=['GET'])
+@flask_login.login_required
+def friend():
+    uid1 = (flask_login.current_user.id)
+
+    friends = friendTuple((flask_login.current_user.id))
+    recs = friendRecs((flask_login.current_user.id))
+    return render_template('friends.html', friends = friends, recs = recs)
+
+@app.route('/friends', methods=['POST'])
+def add_friend():
+    if request.method == 'POST':
+        friend = request.form.get('friends')
+        uid1 = (flask_login.current_user.id)
+        
+        if isEmailUnique(friend) == True:
+            return render_template('friends.html', msg = 'Email does not exist!', friends = friendTuple(flask_login.current_user.id))
+        else:
+             uid2 = getUserIdFromEmail(friend)
+
+        if isFriendsWith(uid1, uid2):
+            return render_template('friends.html', msg = 'You are already friends with that user', friends = friendTuple(flask_login.current_user.id))
+        else:
+            try:
+                conn, cursor = db.get_cursor()
+                cursor.execute("INSERT INTO Friends (id1, id2) VALUES (%s, %s)", (uid1, uid2))
+                conn.commit()
+                cursor.close()
+                return render_template('friends.html', msg='Friend added!', friends = friendTuple(flask_login.current_user.id))
+            except:
+                return render_template('friends.html', msg = 'Can not friend yourself!', friends = friendTuple(flask_login.current_user.id))
+    else:
+        return render_template('friends.html')
+
 #Loads current user if logged in
 @login_manager.user_loader
-def load_user(user_id):
-     user = User.get(user_id)
+def load_user(id):
+     user = User.get(id)
      return user
 
 #If not logged in, display login page
@@ -78,14 +184,14 @@ def map():
 def storedata():
     try:
         data = request.get_json() #Retrieve data from front end
-        user_id = current_user.id
+        id = current_user.id
         concertList = json.dumps(data)
         conn, cursor = db.get_cursor()
 
         #Executes a mysql command
         cursor.execute(
             "INSERT INTO UserSearches (userID, search_data) VALUES (%s, %s)",
-            (user_id, concertList)
+            (id, concertList)
         )
         conn.commit()
         conn.close()
@@ -150,5 +256,5 @@ class SearchForm(FlaskForm):
     csrf_token = HiddenField()
 
 if __name__ == "__main__":
-    # to run me from the command line: <flask --app main run> or <python app.py>                          
+    # to run me from the command line: <flask --app main run> or <python app.py>      
     app.run(host='127.0.0.1', port=5000, debug=True)

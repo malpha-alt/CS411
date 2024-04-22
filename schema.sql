@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS Showrunner;
 USE Showrunner;
 
@@ -36,4 +35,13 @@ CREATE TABLE UserSearches (
     search_data JSON,
     search_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userID) REFERENCES User(id)
+);
+
+CREATE TABLE Friends(
+    id1 VARCHAR(255),
+    id2 VARCHAR(255),
+    CHECK(id1 <> id2),
+    FOREIGN KEY (id1) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY (id2) REFERENCES User(id) ON DELETE CASCADE,
+	PRIMARY KEY(id1, id2)
 );
