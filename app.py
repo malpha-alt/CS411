@@ -14,7 +14,7 @@ import requests
 import json
 import db
 from friends import friends_bp
-
+from maps import maps_bp
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -23,6 +23,7 @@ db.init_app(app)
 load_dotenv() #Loads the .env file
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(friends_bp)
+app.register_blueprint(maps_bp)
 app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
 
 
