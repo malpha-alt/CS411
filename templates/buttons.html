@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <style type="text/css">
+        .box {
+  width: 200px;
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #000;
+  cursor: pointer;
+  position: relative;
+}
+
+.arrow {
+   width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #000;
+  position: absolute;
+  left: 50%; /* Adjusted to center the arrow */
+  bottom: 2px; /* Adjusted to move the arrow to the bottom */
+  transform: translateX(-50%); /* Adjusted to center the arrow */
+  transition: transform 0.3s ease; /* Added for smooth transition */
+}
+
+.open .arrow {
+  transform: translateX(-50%) rotate(180deg); /* Rotates the arrow 180 degrees when the box is open */
+}
+
+.info {
+  display: none;
+  margin-top: 10px;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.button_plus {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            cursor: pointer;
+            padding: 0;
+            right: 3%;
+            top: 18px;
+            transform: translateY(-50%);
+        }
+
+        .button_plus:after {
+            content: '';
+            position: absolute;
+            transform: translate(-50%, -50%);
+            height: 4px;
+            width: 100%;
+            background: #095776;
+            top: 50%;
+            left: 50%;
+            padding:0;
+            transition: .4s;
+        }
+
+        .button_plus:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #095776;
+            height: 100%;
+            width: 4px;
+        }
+
+        .button_plus:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+    </style>
+    
+    <body> 
+        <div class="container">
+            <div class="box" onclick="toggleInfo(this)">
+            Box 1
+            <div class="arrow"></div>
+              <div class="button_plus" onclick="addConcert(this)"></div>
+            <div class="info">
+              More information about Box 1
+            </div>
+          </div>
+          </div>
+        
+    </body>
+
+    <script>
+        function addConcert(artist, date, venue, city, lat, lng) { // Adds a concert to a server side variable
+            alert('Added ' + artist + ' to your list of concerts!');
+            selectedResult = [{artist, date, venue, city, lat, lng}];
+            $.ajax({
+                url: '/storedata',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(selectedResult),
+                success: function() {
+                    console.log("Data stored successfully");
+                },
+                error: function(response){
+                    console.log("Error:", response.responseText);
+                    alert('Failed to add concert!');
+                }
+            });
+        }
+
+        function toggleInfo(element) {
+            var info = element.getElementsByClassName('info')[0];
+            if (info.style.display !== "block") {
+                info.style.display = "block";
+                element.classList.add('open')
+            } else {
+                info.style.display = "none";
+                element.classList.remove('open')
+            }
+        }
+    </script>
+</html>
