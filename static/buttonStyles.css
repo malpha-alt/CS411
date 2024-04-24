@@ -1,0 +1,107 @@
+/* Makes the background around the menu bars */
+.menuButton {
+    cursor: pointer;
+    background-color: rgba(189, 189, 189, 0.774);
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 4px;
+    padding-left: 10px;
+    position: absolute;
+    top: 10px;
+    right: -44px;
+    display: inline-block;
+    transition: .4s;
+    z-index: 1;
+}
+
+/* Formats menu bars */
+.bar1, .bar2, .bar3 {
+    width: 30px;
+    height: 5px;
+    background-color: #333;
+    margin: 4px 0;
+    transition: 0.4s;
+    transform-origin: right;
+    border-radius: 5px;
+}
+
+/* Menu bar animation */
+.change .bar1 {
+    transform: translateY(8px) rotate(-25deg);
+}
+.change .bar2 {
+    opacity: 0;
+}
+.change .bar3 {
+    transform: translateY(-8px) rotate(25deg);
+}
+
+/* Plus sign button */
+.button_plus {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    cursor: pointer;
+    padding: 0;
+    right: 3%;
+    top: 18px;
+    transform: translateY(-50%);
+}
+
+.button_plus:after {
+    content: '';
+    position: absolute;
+    transform: translate(-50%, -50%);
+    height: 4px;
+    width: 100%;
+    background: #095776;
+    top: 50%;
+    left: 50%;
+    padding:0;
+    transition: .4s;
+}
+
+.button_plus:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #095776;
+    height: 100%;
+    width: 4px;
+}
+
+/* Plus button animation */
+.button_plus:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Expand arrow */
+.arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #000;
+    position: absolute;
+    left: 50%; /* Adjusted to center the arrow */
+    bottom: 2px; /* Adjusted to move the arrow to the bottom */
+    transform: translateX(-50%); /* Adjusted to center the arrow */
+    transition: transform 0.3s ease; /* Added for smooth transition */
+ }
+ 
+/* Arrow animation */
+ .open .arrow {
+    transform: translateX(-50%) rotate(180deg); /* Rotates the arrow 180 degrees when the box is open */
+ }
+
+/* Back button */
+#backButton {
+    left: 10px;
+    bottom: 10px;
+    position: fixed;
+}

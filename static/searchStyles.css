@@ -1,0 +1,57 @@
+/* Search for concert menu option */
+.searchBar {
+    width: 90%;
+    top: 10px;
+    height: 30px;
+    position: absolute;
+    left: 10px;
+}
+
+.datePicker {
+    width: 90%;
+    height: 30px;
+    top: 45px;
+    position: absolute;
+    left: 10px;
+}
+
+.searchButton {
+    width: 90%;
+    height: 30px;
+    top: 78px;
+    position: absolute;
+    left: 10px;
+}
+
+/* Display results */
+#results {
+    padding: 10px;
+    top: 100px;
+    position: absolute;
+}
+
+#results div {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.box {
+    width: 400px;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #000;
+    cursor: pointer;
+    position: relative;
+}
+
+.info {
+    display: none;
+    margin-top: 10px;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
