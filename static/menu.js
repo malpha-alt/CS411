@@ -58,11 +58,12 @@ function showSearchAndDatePicker() {
 
 function displayConcerts() {
     var concertList = window.concertList;
-
+    console.log(concertList);
     var resultsDiv = document.querySelector('#menuContent');
-
     resultsDiv.innerHTML = `<button onclick="showMenuOptions()" id="backButton">Back</button>
-                            <div class="container">`;
+                            <div id="results"></div>`;
+    var concertDiv = document.getElementById('results');
+    concertDiv.innerHTML += `<div class="container">`;
     for (var i = 0; i < concertList.length; i++) {  
         var concert = concertList[i];
         var resultHTML = `
@@ -73,12 +74,12 @@ function displayConcerts() {
                     Venue: ${concert.venue}, ${concert.city} <br>
                     Setlist: <br>
             `;
-            for (var j = 0; j < concert.set.length; j++) {
-                resultHTML += `${concert.set[j]}<br>`;
+            for (var j = 0; j < concert.songList.length; j++) {
+                resultHTML += `${concert.songList[j]}<br>`;
             }
-        resultsDiv.innerHTML += resultHTML+`</div></div>`;
+        concertDiv.innerHTML += resultHTML+`</div></div>`;
     }
-    resultsDiv.innerHTML += `</div>
+    concertDiv.innerHTML += `</div>
                              <div class="button_plus" onclick="showSearchAndDatePicker()"></div>`;
 
 }
@@ -138,7 +139,7 @@ function showMenuOptions() {
     var menuContent = document.querySelector('#menuContent');
     menuContent.innerHTML = `
         <div class="menuButtonOptions">
-            <a href="#" onclick="showSearchAndDatePicker()" class="menuOptions">Concert List</a>
+            <a href="#" onclick="displayConcerts()" class="menuOptions">Concert List</a>
             <div class="menuOptions">Friends List</div>
             <div class="menuOptions">Settings</div> 
         </div>`;
