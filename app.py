@@ -24,7 +24,7 @@ load_dotenv() #Loads the .env file
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(friends_bp)
 app.register_blueprint(maps_bp)
-app.secret_key = os.getenv('SECRET_KEY', 'default-secret-key')
+app.config['SECRET_KEY'] = os.urandom(32)
 
 
 #Retrieves database information
@@ -115,10 +115,10 @@ headers = {
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    form = SearchForm()
     artist = request.form.get('query') # Result from search bar
     date = request.form.get('date') #Result from date
-
+    print("artist: ", artist)
+    print("date: ", date)
     results = []
     #Checks if information was entered for both artist and date
     if artist and date: 
@@ -131,32 +131,33 @@ def search():
                         "date": date}  
         endpoint = "https://api.setlist.fm/rest/1.0/search/setlists"
         response = requests.get(endpoint, params=query_params, headers=headers).json()
-        
         #If the response is not None
         if response.get("setlist"): 
             for item in response.get("setlist"): # adds multiple setlist details to an item in a dictionary
-                artist_name = item.get("artist").get("name")
-                concert_date = item.get("eventDate")
-                city = item.get("venue").get("city").get("name")
-                venue = item.get("venue").get("name")
-                venue_coords = item.get("venue").get("city").get("coords")
-                lat = venue_coords.get("lat")
-                lng = venue_coords.get("long")
-                results.append({'artist': artist_name, 
+                if len(item.get("sets").get("set")) > 0:
+                    artist_name = item.get("artist").get("name")
+                    concert_date = item.get("eventDate")
+                    city = item.get("venue").get("city").get("name")
+                    venue = item.get("venue").get("name")
+                    venue_coords = item.get("venue").get("city").get("coords")
+                    lat = venue_coords.get("lat")
+                    lng = venue_coords.get("long")
+                    setlist = []
+
+                    songs = item.get("sets").get("set")[0].get("song")
+                    for x in range (len(songs)):
+                        setlist.append(songs[x].get("name"))
+                    results.append({'artist': artist_name, 
                                 'date': concert_date, 
                                 'venue': venue,
                                 'city': city,
                                 'lat': lat,
-                                'lng': lng})
+                                'lng': lng,
+                                'set': setlist})
         else:
             results = None
-    return render_template('search.html', form=form, results=results)
-
-class SearchForm(FlaskForm):
-    ids = StringField("ID",validators=[DataRequired()])
-    date = DateField('Pick a Date', format='%Y-%m-%d')
-    submit = SubmitField("Submit")
-    csrf_token = HiddenField()
+        print(results)
+    return jsonify(results)
 
 if __name__ == "__main__":
     # to run me from the command line: <flask --app main run> or <python app.py>      
