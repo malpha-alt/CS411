@@ -6,7 +6,9 @@
         <title>Concert Map</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE-edge">
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='buttonStyles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='menuStyles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='searchStyles.css') }}">
         <style type="text/css">
     
             * { padding: 0; margin: 0}
@@ -23,11 +25,6 @@
                 align-self: center;
                 margin: 0 auto;
                 position: absolute;
-            }
-            .top-left {
-                position: absolute;
-                top: 10px;
-                left: 10px;
             }
             .top-right{
                 position: absolute;
@@ -46,13 +43,156 @@
             <button>logout</button>
         </a>
 
+        <div id="menu" class="menu">
+            <div class="menuButton" onclick="toggleMenu()" 
+                onmouseenter="changePos(this)" 
+                onmouseleave="changePos(this)">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <!-- Add your menu options here -->
+            <div id="menuContent">
+                <div class="menuButtonOptions">
+                    <a href="#" onclick="showSearchAndDatePicker()" class="menuOptions" style="text-decoration: none" color="black">Concert List</a>
+                    <div class="menuOptions">Friends List</div>
+                    <div class="menuOptions">Settings</div> 
+                </div>
+            </div>
+        </div>
     </body>
     <script id = "mapCall" defer src = "{{ mapCall }}"></script>
     <script type="text/javascript" id = "concertList"> 
         window.concertList = {{ concertList | tojson | safe }};
     </script>
-    <! --Calls the js file from the static directory-->
+    <!-- Calls the js file from the static directory-->
     <script src="{{ url_for('static', filename='main.js') }}"></script>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function addConcert(artist, date, venue, lat, lng, songList) { // Adds a concert to a server side variable
+            alert('Added ' + concert.artist + ' to your list of concerts!');
+            /*const artist=concert.artist;
+            const date=concert.date;
+            const venue=concert.venue;
+            const lat=concert.lat;
+            const lng=concert.lng;
+            const songList=concert.set;*/
+            console.log("yay");
+            selectedResult = [{artist, date, venue, songList}];
+            $.ajax({
+                url: '/storedata',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(selectedResult),
+                success: function() {
+                    console.log("Data stored successfully");
+                },
+                error: function(response){
+                    console.log("Error:", response.responseText);
+                    alert('Failed to add concert!');
+                }
+            });
+        }
+
+        function toggleInfo(element) {
+            var info = element.getElementsByClassName('info')[0];
+            if (info.style.display !== "block") {
+                info.style.display = "block";
+                element.classList.add('open')
+            } else {
+                info.style.display = "none";
+                element.classList.remove('open')
+            }
+        }
+
+        //Animates menu button
+        function changePos(x) {
+            x.classList.toggle('change');
+        }
+
+        //Moves the menu on screen
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            menu.classList.toggle('open');
+        }
+
+        function showSearchAndDatePicker() {
+            var searchAndResults = document.querySelector('#menuContent');
+                searchAndResults.innerHTML = `
+                    <form id="searchForm">
+                        <input type="text" name="query" class="searchBar" placeholder="Artist...">
+                        <input type="date" name="date" class="datePicker">
+                        <input type="submit" value="Submit" class="searchButton">
+                    </form>
+                    <button onclick="showMenuOptions()" id="backButton">Back</button>
+                    <div id="results"></div>
+                `;
+
+            document.getElementById('searchForm').addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevent the form from being submitted normally
+
+                var query = document.querySelector('.searchBar').value;
+                var date = document.querySelector('.datePicker').value;
+
+                // Send an AJAX request
+                $.ajax({
+                    url: '/search',
+                    method: 'POST',
+                    data: {
+                        query: query,
+                        date: date
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        var resultsDiv = document.getElementById('results');
+                        resultsDiv.innerHTML = ``;  // Clear any existing results
+
+                        // Loop through the results and add them to the results div
+                        for (var i = 0; i < response.length; i++) {
+                            
+                            var result = response[i];
+                            const songList = JSON.stringify(result.set);
+                            const artist=result.artist;
+                            const date=result.date;
+                            const venue=result.venue;
+                            const lat=result.lat;
+                            const lng=result.lng;
+                            console.log(songList);
+                            resultsDiv.innerHTML += `<div class="container">`;
+                            var resultHTML = `
+                                <div class="box" onclick="toggleInfo(this)">
+                                    <h3>${result.artist}</h3>
+                                    <div class="arrow"></div>
+                                    <div class="button_plus" 
+                                    onclick="addConcert('${artist}', '${date}', '${venue}', '${lat}', '${lng}', ${songList})"></div>
+                                    <div class="info">
+                                        Venue: ${result.venue}, ${result.city} <br>
+                                        Setlist: <br>
+                                `;
+                                for (var j = 0; j < result.set.length; j++) {
+                                    resultHTML += `${result.set[j]}<br>`;
+                                }
+                            resultsDiv.innerHTML += resultHTML+`</div></div>`;
+                        }
+                        resultsDiv.innerHTML += `</div>`;
+                    }
+                });
+            });
+        }
+        function clickedButton() {
+            addConcert(result.artist, result.date, result.venue, result.lat, result.lng, JSON.stringify(result.set))
+        };
+        //Display menu options again
+        function showMenuOptions() {
+            var menuContent = document.querySelector('#menuContent');
+            menuContent.innerHTML = `
+                <div class="menuButtonOptions">
+                    <a href="#" onclick="showSearchAndDatePicker()" class="menuOptions">Concert List</a>
+                    <div class="menuOptions">Friends List</div>
+                    <div class="menuOptions">Settings</div> 
+                </div>
+            `;
+        }
+    </script>
     
 </html>
