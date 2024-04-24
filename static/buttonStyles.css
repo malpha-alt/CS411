@@ -43,7 +43,7 @@
     position: absolute;
     width: 20px;
     height: 20px;
-    background: #fff;
+    background: #645218;
     cursor: pointer;
     padding: 0;
     right: 3%;
@@ -57,7 +57,7 @@
     transform: translate(-50%, -50%);
     height: 4px;
     width: 100%;
-    background: #095776;
+    background: #b78dec;
     top: 50%;
     left: 50%;
     padding:0;
@@ -70,7 +70,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #095776;
+    background: #b78dec;
     height: 100%;
     width: 4px;
 }
