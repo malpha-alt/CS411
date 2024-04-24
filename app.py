@@ -2,9 +2,6 @@ from flask import Flask, render_template, request, jsonify, Blueprint
 from flaskext.mysql import MySQL
 import flask_login
 from flask_login import current_user, login_required
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, HiddenField
-from wtforms.validators import DataRequired
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv

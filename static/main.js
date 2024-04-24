@@ -1,6 +1,5 @@
 function initMap() {
     var concertList = window.concertList; // Used to create markers. Eventually will recieve the locatios from the set lists
-    console.log(concertList);
 
     var markers = []
     function createMarkers(M) {
