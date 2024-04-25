@@ -3,6 +3,7 @@ var concerts = [];
 function showSearchAndDatePicker() {
     var searchAndResults = document.querySelector('#menuContent');
         searchAndResults.innerHTML = `
+            <h3 class="titles">Add Concerts</h3>
             <form id="searchForm">
                 <input type="text" name="query" class="searchBar" placeholder="Artist...">
                 <input type="date" name="date" class="datePicker">
@@ -33,7 +34,7 @@ function showSearchAndDatePicker() {
 
                 concerts = response;
                 // Loop through the results and add them to the results div
-                resultsDiv.innerHTML += `<div class="container">`;
+                resultsDiv.innerHTML += `<div class="containerSearch">`;
                 for (var i = 0; i < response.length; i++) {
                     var result = response[i];
                     var resultHTML = `
@@ -60,10 +61,11 @@ function displayConcerts() {
     var concertList = window.concertList;
     console.log(concertList);
     var resultsDiv = document.querySelector('#menuContent');
-    resultsDiv.innerHTML = `<button onclick="showMenuOptions()" id="backButton">Back</button>
-                            <div id="results"></div>`;
+    resultsDiv.innerHTML = `<h3 class="titles">Setlists</h3>
+                            <button onclick="showMenuOptions()" id="backButton">Back</button>
+                            <div id="results" class="containerDisplay"></div>
+                            <div class="button_plus" onclick="showSearchAndDatePicker()"></div>`;
     var concertDiv = document.getElementById('results');
-    concertDiv.innerHTML += `<div class="container">`;
     for (var i = 0; i < concertList.length; i++) {  
         var concert = concertList[i];
         var resultHTML = `
@@ -74,14 +76,12 @@ function displayConcerts() {
                     Venue: ${concert.venue}, ${concert.city} <br>
                     Setlist: <br>
             `;
-            for (var j = 0; j < concert.songList.length; j++) {
-                resultHTML += `${concert.songList[j]}<br>`;
-            }
-        concertDiv.innerHTML += resultHTML+`</div></div>`;
+        for (var j = 0; j < concert.songList.length; j++) {
+            resultHTML += `${concert.songList[j]}<br>`;
+        }
+        resultHTML += `</div></div>`;
+        concertDiv.innerHTML += resultHTML;
     }
-    concertDiv.innerHTML += `</div>
-                             <div class="button_plus" onclick="showSearchAndDatePicker()"></div>`;
-
 }
 
 //Sends added concert to /storedata to add concert to the database

@@ -6,6 +6,7 @@
     height: 100%;
     background-color: #645218;
     transition: .4s;
+    
 }
 
 /* Slides the menu on screen */
@@ -24,4 +25,12 @@
     padding: 20px;
     text-align: center;
     cursor: pointer;
+}
+
+.titles {
+    font-size: 24px; 
+    font-weight: bold; 
+    color: #ffffff; 
+    text-align: center;
+    top: 10px;
 }
