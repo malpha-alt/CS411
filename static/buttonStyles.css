@@ -46,10 +46,9 @@
     background: #645218;
     cursor: pointer;
     padding: 0;
-    right: 15px;
-    top: 15px;
+    right: 3%;
+    top: 16px;
     transform: translateY(-50%);
-    opacity: 0px;
 }
 
 .button_plus:after {
@@ -92,17 +91,54 @@
     left: 50%; /* Adjusted to center the arrow */
     bottom: 2px; /* Adjusted to move the arrow to the bottom */
     transform: translateX(-50%); /* Adjusted to center the arrow */
-    transition: transform 0.3s ease; /* Added for smooth transition */
+    transition: 0.5s; /* Added for smooth transition */
  }
  
 /* Arrow animation */
- .open .arrow {
+ .openA .arrow {
     transform: translateX(-50%) rotate(180deg); /* Rotates the arrow 180 degrees when the box is open */
  }
 
 /* Back button */
-#backButton {
-    left: 5px;
-    top: 5px;
+.backButton {
+    left: 6px;
+    top: 6px;
     position: fixed;
+}
+
+.logoutButton {
+    position:absolute;
+    height:50px;
+    width:100px;
+    border-radius: 55px;
+    left: calc(50% - 50px); /* Center horizontally */
+    bottom: 10px; /* 10px from the bottom */
+    background-color:rgb(210, 0, 0);
+    border:none;
+    color:white;
+    transition: .3s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.logoutButton:hover {
+    background-color:rgb(190, 0, 0); /* Darken the color on hover */
+}
+
+.refreshPageButton {
+    position:fixed;
+    height:35px;
+    width: 100px;
+    top: 10px;
+    left: 50%;
+    color:black;
+    display: none;
+    transform: translate(-50%, 0%);
+}
+
+.refreshPageButton:hover {
+    background-color: rgb(169, 169, 169);
 }

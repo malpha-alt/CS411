@@ -45,13 +45,13 @@
 .containerSearch {
     position: fixed;
     top: 110px;
-    bottom: 30px;
+    bottom: 1px;
     overflow-y: auto;
 }
 .containerDisplay {
     position: fixed;
     top: 30px;
-    bottom: 30px;
+    bottom: 1px;
     overflow-y: auto;
 }
 .containerSearch::-webkit-scrollbar {

@@ -28,9 +28,10 @@
 }
 
 .titles {
-    font-size: 24px; 
+    font-size: 28px; 
     font-weight: bold; 
     color: #ffffff; 
     text-align: center;
-    top: 10px;
+    position: relative;
+    top: 1px;
 }

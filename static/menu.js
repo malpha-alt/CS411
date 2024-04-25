@@ -9,7 +9,7 @@ function showSearchAndDatePicker() {
                 <input type="date" name="date" class="datePicker">
                 <input type="submit" value="Submit" class="searchButton">
             </form>
-            <button onclick="displayConcerts()" id="backButton">Back</button>
+            <button onclick="displayConcerts()" class="backButton">Back</button>
             <div id="results"></div>
         `;
 
@@ -62,7 +62,7 @@ function displayConcerts() {
     console.log(concertList);
     var resultsDiv = document.querySelector('#menuContent');
     resultsDiv.innerHTML = `<h3 class="titles">Setlists</h3>
-                            <button onclick="showMenuOptions()" id="backButton">Back</button>
+                            <button onclick="showMenuOptions()" class="backButton">Back</button>
                             <div id="results" class="containerDisplay"></div>
                             <div class="button_plus" onclick="showSearchAndDatePicker()"></div>`;
     var concertDiv = document.getElementById('results');
@@ -86,7 +86,6 @@ function displayConcerts() {
 
 //Sends added concert to /storedata to add concert to the database
 function addConcert(index) { // Adds a concert to a server side variable
-    //alert('Added ' + concert.artist + ' to your list of concerts!');
     concert = concerts[index]
     const artist=concert.artist;
     const date=concert.date;
@@ -102,6 +101,9 @@ function addConcert(index) { // Adds a concert to a server side variable
         contentType: 'application/json',
         data: JSON.stringify(selectedResult),
         success: function() {
+            alert('Added ' + concert.artist + ' to your list of concerts!');
+            var button = document.querySelector('.refreshPageButton');
+            button.style.display = 'block';
             console.log("Data stored successfully");
         },
         error: function(response){
@@ -116,23 +118,37 @@ function toggleInfo(element) {
     var info = element.getElementsByClassName('info')[0];
     if (info.style.display !== "block") {
         info.style.display = "block";
-        element.classList.add('open')
+        flipArrow(element);
     } else {
         info.style.display = "none";
-        element.classList.remove('open')
+        flipArrow(element);
     }
+}
+
+//Animates arrow
+function flipArrow(x) {
+    x.classList.toggle('openA')
 }
 
 //Animates menu button
 function changePos(x) {
     x.classList.toggle('change');
-    }
+}
 
 //Moves the menu on screen
 function toggleMenu() {
     var menu = document.getElementById('menu');
     menu.classList.toggle('open');
 }
+
+function toggleLogout() {
+    var menu = document.getElementById('logoutButton');
+    menu.classList.toggle('displayLogout');
+}
+
+function refreshPage(){
+    window.location.reload();
+} 
 
 //Display menu options again
 function showMenuOptions() {
@@ -142,5 +158,7 @@ function showMenuOptions() {
             <a href="#" onclick="displayConcerts()" class="menuOptions">Concert List</a>
             <div class="menuOptions">Friends List</div>
             <div class="menuOptions">Settings</div> 
-        </div>`;
+            <a href="/auth/logout" class="logoutButton">Logout</a>
+        </div>`
+        ;
 }
