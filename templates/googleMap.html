@@ -14,7 +14,9 @@
             * { padding: 0; margin: 0}
             html, body {
                 height: 100%;
+                overflow: hidden;
             }
+
             body {
                 display: flex;
             }
@@ -39,13 +41,13 @@
     </head>
     
     <body>
-        <div id="google-map"></div>
+        <!--<div id="google-map"></div>-->
         <a href="/auth/logout" class="top-right">
             <button>logout</button>
         </a>
 
         <div id="menu" class="menu">
-            <div class="menuButton" onclick="toggleMenu()" 
+            <div class="menuButton" onclick="toggleMenu(); showMenuOptions()" 
                 onmouseenter="changePos(this)" 
                 onmouseleave="changePos(this)">
                 <div class="bar1"></div>
