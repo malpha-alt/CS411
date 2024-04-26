@@ -107,8 +107,7 @@ function addConcert(index) { // Adds a concert to a server side variable
             console.log("Data stored successfully");
         },
         error: function(response){
-            console.log("Error:", response.responseText);
-            alert('Failed to add concert!');
+            alert('Concert already added!');
         }
     });
 }

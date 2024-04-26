@@ -54,6 +54,8 @@ def load_user(id):
 def displayLogin():
     return render_template('login.html')
 
+concert_list = []
+
 #Main page of website (Shows the map)
 @app.route('/')
 def map():
@@ -70,7 +72,6 @@ def map():
             concert_list.extend(results)
         cursor.close()
         conn.close()
-
         #Builds the api call
         mapCall = 'https://maps.googleapis.com/maps/api/js?key=' + os.getenv('GOOGLE_MAP_API') + '&callback=initMap' # type: ignore
         return render_template('googleMap.html', mapCall=mapCall, concertList=concert_list)
@@ -85,19 +86,34 @@ def storedata():
     try:
         data = request.get_json() #Retrieve data from front end
         id = current_user.id
-        concertList = json.dumps(data)
+        concert = json.dumps(data)
         conn, cursor = db.get_cursor()
+        newConcert = json.loads(concert)
+        newConcert = newConcert[0]
+        print("post ", newConcert['artist'], newConcert['date'])
+        cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (current_user.id,))
+        user_searches = cursor.fetchall()
+    
+        #Add database information to a list to send to map creation
+        concert_list = []
+        for search in user_searches:
+            results = json.loads(search[0])
+            concert_list.extend(results)
 
-        #Executes a mysql command
-        cursor.execute(
-            "INSERT INTO UserSearches (userID, search_data) VALUES (%s, %s)",
-            (id, concertList)
-        )
-        conn.commit()
-        conn.close()
-        cursor.close()
-                
-        return jsonify({'message': 'Data stored successfully'}), 200
+
+        if newConcert not in concert_list:
+            #Executes a mysql command
+            cursor.execute(
+                "INSERT INTO UserSearches (userID, search_data) VALUES (%s, %s)",
+                (id, concert)
+            )
+            conn.commit()
+            conn.close()
+            cursor.close()
+                    
+            return jsonify({'message': 'Data stored successfully'}), 200
+        else: 
+            return jsonify({'error': 'Concert already added'}), 500
     except Exception as e:
         #Error in storing data
         app.logger.error(f"Error storing data: {str(e)}")  # Log the error
@@ -114,8 +130,6 @@ headers = {
 def search():
     artist = request.form.get('query') # Result from search bar
     date = request.form.get('date') #Result from date
-    print("artist: ", artist)
-    print("date: ", date)
     results = []
     #Checks if information was entered for both artist and date
     if artist and date: 
@@ -140,7 +154,6 @@ def search():
                     lat = venue_coords.get("lat")
                     lng = venue_coords.get("long")
                     setlist = []
-
                     songs = item.get("sets").get("set")[0].get("song")
                     for x in range (len(songs)):
                         setlist.append(songs[x].get("name"))
@@ -153,7 +166,6 @@ def search():
                                 'set': setlist})
         else:
             results = None
-        print(results)
     return jsonify(results)
 
 if __name__ == "__main__":
