@@ -62,9 +62,9 @@ def map():
     if current_user.is_authenticated:
         #Get concertList from the database
         conn, cursor = db.get_cursor()
-        cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (current_user.id,))
+        cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (current_user.id))
         user_searches = cursor.fetchall()
-      
+        print(user_searches)
         #Add database information to a list to send to map creation
         concert_list = []
         for search in user_searches:
@@ -72,6 +72,7 @@ def map():
             concert_list.extend(results)
         cursor.close()
         conn.close()
+        print('Concert list 1', concert_list)
         #Builds the api call
         mapCall = 'https://maps.googleapis.com/maps/api/js?key=' + os.getenv('GOOGLE_MAP_API') + '&callback=initMap' # type: ignore
         return render_template('googleMap.html', mapCall=mapCall, concertList=concert_list)
@@ -88,21 +89,12 @@ def storedata():
         id = current_user.id
         concert = json.dumps(data)
         conn, cursor = db.get_cursor()
-        newConcert = json.loads(concert)
-        newConcert = newConcert[0]
-        print("post ", newConcert['artist'], newConcert['date'])
+        newConcert = json.loads(concert)[0]
         cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (current_user.id,))
         user_searches = cursor.fetchall()
-    
-        #Add database information to a list to send to map creation
-        concert_list = []
-        for search in user_searches:
-            results = json.loads(search[0])
-            concert_list.extend(results)
 
-
-        if newConcert not in concert_list:
-            #Executes a mysql command
+        #If first user search insert into table
+        if len(user_searches) == 0:
             cursor.execute(
                 "INSERT INTO UserSearches (userID, search_data) VALUES (%s, %s)",
                 (id, concert)
@@ -110,14 +102,67 @@ def storedata():
             conn.commit()
             conn.close()
             cursor.close()
-                    
             return jsonify({'message': 'Data stored successfully'}), 200
-        else: 
-            return jsonify({'error': 'Concert already added'}), 500
+        else:
+            #Add database information to a list of concerts
+            concert_list = []
+            for search in user_searches:
+                results = json.loads(search[0])
+                concert_list.extend(results)
+            #Checks for duplicate concerts
+            if newConcert not in concert_list:
+                concert_list.append(newConcert) 
+                concert_list = json.dumps(concert_list) #Converts to json data
+                cursor.execute(
+                    "UPDATE UserSearches SET search_data = %s WHERE userID = %s", 
+                    (concert_list, id)
+                )
+                conn.commit()
+                conn.close()
+                cursor.close()
+                        
+                return jsonify({'message': 'Data stored successfully'}), 200
+            else: 
+                return jsonify({'error': 'Concert already added'}), 500
     except Exception as e:
         #Error in storing data
         app.logger.error(f"Error storing data: {str(e)}")  # Log the error
         return jsonify({'error': str(e)}), 500
+
+@app.route('/removeconcert', methods=['POST'])
+@login_required
+def removeConcert():
+    try:
+        data = request.get_json() #Retrieve data from front end
+        id = current_user.id
+        concert_to_remove = json.dumps(data)
+        concert_to_remove = json.loads(concert_to_remove)[0]
+        conn, cursor = db.get_cursor()
+        cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (id))
+        user_searches = cursor.fetchall()
+
+        #Grabs all concerts from user_searches
+        updated_concert_list = []
+        for search in user_searches:
+            results = json.loads(search[0])
+            updated_concert_list.extend(results)
+
+        updated_concert_list.remove(concert_to_remove) #Removes concert from list
+        updated_concert_list = json.dumps(updated_concert_list) #Converts back to json
+        #Updates the dp with the removed concert list
+        cursor.execute(
+            "UPDATE UserSearches SET search_data = %s WHERE userID = %s", 
+            (updated_concert_list, id)
+        )
+        conn.commit()
+        conn.close()
+        cursor.close()
+        return jsonify({'message': 'Data removed successfully'}), 200
+    except Exception as e:
+        #Error in storing data
+        app.logger.error(f"Error removing data: {str(e)}")  # Log the error
+        return jsonify({'error': str(e)}), 500
+
 
 #Loads the setlist.fm api headers
 api_key = os.getenv('SETLIST_API_KEY')

@@ -80,6 +80,36 @@
     transform: translateY(-50%) scale(1.1);
 }
 
+/* Plus sign button */
+.button_minus {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #645218;
+    cursor: pointer;
+    padding: 0;
+    right: 3%;
+    top: 16px;
+    transform: translateY(-50%);
+}
+
+.button_minus:after {
+    content: '';
+    position: absolute;
+    transform: translate(-50%, -50%);
+    height: 4px;
+    width: 100%;
+    background: #b78dec;
+    top: 50%;
+    left: 50%;
+    padding:0;
+    transition: .4s;
+}
+
+.button_minus:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
 /* Expand arrow */
 .arrow {
     width: 0;

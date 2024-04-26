@@ -72,6 +72,7 @@ function displayConcerts() {
             <div class="box" onclick="toggleInfo(this); map.setCenter(new google.maps.LatLng(${concert.lat}, ${concert.lng}))"">
                 <h3>${concert.artist}, ${concert.date}</h3>
                 <div class="arrow"></div>
+                <div class="button_minus" onclick="removeConcert(${i})"></div>
                 <div class="info">
                     Venue: ${concert.venue}, ${concert.city} <br>
                     Setlist: <br>
@@ -108,6 +109,38 @@ function addConcert(index) { // Adds a concert to a server side variable
         },
         error: function(response){
             alert('Concert already added!');
+        }
+    });
+}
+
+//Sends added concert to /storedata to add concert to the database
+function removeConcert(index) { // Adds a concert to a server side variable
+    var concertList = window.concertList;
+    console.log('reached remove')
+    console.log(concertList)
+    concert = concertList[index]
+    console.log(concert)
+    const artist=concert.artist;
+    const date=concert.date;
+    const venue=concert.venue;
+    const lat=concert.lat;
+    const lng=concert.lng;
+    const songList=concert.songList;
+    console.log(songList);
+    selectedResult = [{artist, date, venue, lat, lng, songList}];
+    $.ajax({
+        url: '/removeconcert',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(selectedResult),
+        success: function() {
+            alert('Removed ' + concert.artist+ ', ' + concert.date + ' to your list of concerts!');
+            var button = document.querySelector('.refreshPageButton');
+            button.style.display = 'block';
+            console.log("Data stored successfully");
+        },
+        error: function(response){
+            alert('Error removing');
         }
     });
 }
