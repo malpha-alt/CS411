@@ -1,7 +1,9 @@
+//Global variable for the map
+var map;
+var concertList = window.concertList;
+var markers = [];
 function initMap() {
-    var concertList = window.concertList; // Used to create markers. Eventually will recieve the locatios from the set lists
 
-    var markers = []
     function createMarkers(M) {
         for(let x = 0; x < M.length; x++) {
             let marker = {
@@ -13,9 +15,10 @@ function initMap() {
             };
             markers.push(marker);
         }
+        return markers;
     }
-    createMarkers(concertList)
-    console.log(markers)
+    markers = createMarkers(concertList)
+    //console.log(markers)
     
 
     //Custom icons. Will eventually be an icon with the accounts profile picture. Another idea is having an arena icon that gets bigger the more its visited
@@ -25,7 +28,7 @@ function initMap() {
     
     const mapOptions = { //All map options
         center: centerMap,
-        zoom: 10,
+        zoom: 7,
         disableDefaultUI: true,
         keyboardShortcuts: false,
         mapTypeId: "styled_map"
@@ -160,7 +163,7 @@ function initMap() {
         { name: "Styled Map" },
     );
 
-    const map = new google.maps.Map(document.getElementById("google-map"), mapOptions) // Creates map
+    map = new google.maps.Map(document.getElementById("google-map"), mapOptions) // Creates map
         
     map.mapTypes.set("styled_map", styledMapType);
 

@@ -69,7 +69,7 @@ function displayConcerts() {
     for (var i = 0; i < concertList.length; i++) {  
         var concert = concertList[i];
         var resultHTML = `
-            <div class="box" onclick="toggleInfo(this)">
+            <div class="box" onclick="toggleInfo(this); map.setCenter(new google.maps.LatLng(${concert.lat}, ${concert.lng}))"">
                 <h3>${concert.artist}, ${concert.date}</h3>
                 <div class="arrow"></div>
                 <div class="info">
