@@ -18,7 +18,6 @@ function initMap() {
         return markers;
     }
     markers = createMarkers(concertList)
-    //console.log(markers)
     
 
     //Custom icons. Will eventually be an icon with the accounts profile picture. Another idea is having an arena icon that gets bigger the more its visited
@@ -31,7 +30,8 @@ function initMap() {
         zoom: 7,
         disableDefaultUI: true,
         keyboardShortcuts: false,
-        mapTypeId: "styled_map"
+        mapTypeId: "styled_map",
+        maxZoom: 11
     }
 
     const styledMapType = new google.maps.StyledMapType( //Styled map
@@ -61,23 +61,8 @@ function initMap() {
         },
         {
             featureType: "poi",
-            elementType: "geometry",
-            stylers: [{ color: "#dfd2ae" }],
-        },
-        {
-            featureType: "poi",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#93817c" }],
-        },
-        {
-            featureType: "poi.park",
-            elementType: "geometry.fill",
-            stylers: [{ color: "#a5b076" }],
-        },
-        {
-            featureType: "poi.park",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#447530" }],
+            elementType: "labels",
+            styles: [{visibility: "off"}]
         },
         {
             featureType: "road",
