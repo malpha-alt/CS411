@@ -30,8 +30,7 @@ create TABLE Song(
 );
 
 CREATE TABLE UserSearches (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    userID varchar(255) NOT NULL,
+    userID varchar(255) NOT NULL PRIMARY KEY,
     search_data JSON,
     search_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (userID) REFERENCES User(id)
