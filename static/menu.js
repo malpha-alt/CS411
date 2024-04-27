@@ -90,12 +90,15 @@ function addConcert(index) { // Adds a concert to a server side variable
     concert = concerts[index]
     const artist=concert.artist;
     const date=concert.date;
+    const city=concert.city;
+    const state=concert.state;
+    const country=concert.country;
     const venue=concert.venue;
     const lat=concert.lat;
     const lng=concert.lng;
     const songList=concert.set;
     console.log(concerts[index]);
-    selectedResult = [{artist, date, venue, lat, lng, songList}];
+    selectedResult = [{artist, date, city, state, country, venue, lat, lng, songList}];
     $.ajax({
         url: '/storedata',
         type: 'POST',

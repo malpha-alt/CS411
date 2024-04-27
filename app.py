@@ -74,7 +74,7 @@ def map():
         conn.close()
         print('Concert list 1', concert_list)
         #Builds the api call
-        mapCall = 'https://maps.googleapis.com/maps/api/js?key=' + os.getenv('GOOGLE_MAP_API') + '&callback=initMap' # type: ignore
+        mapCall = f'https://maps.googleapis.com/maps/api/js?key={os.getenv('GOOGLE_DEV_API')}&callback=initMap'
         return render_template('googleMap.html', mapCall=mapCall, concertList=concert_list)
     else:
         #If not logged in go to login page
@@ -194,24 +194,42 @@ def search():
                     artist_name = item.get("artist").get("name")
                     concert_date = item.get("eventDate")
                     city = item.get("venue").get("city").get("name")
-                    venue = item.get("venue").get("name")
-                    venue_coords = item.get("venue").get("city").get("coords")
-                    lat = venue_coords.get("lat")
-                    lng = venue_coords.get("long")
+                    venueName = item.get("venue").get("name")
+                    venueState = item.get("venue").get("city").get("stateCode")
+                    venueCountry = item.get("venue").get("city").get("country").get("code")
+                    address = f"{venueName}, {city}, {venueState}, {venueCountry}"
+                    lat, lng = getVenueCoords(address, item.get("venue").get("city").get("lat"), item.get("venue").get("city").get("lng"))
                     setlist = []
                     songs = item.get("sets").get("set")[0].get("song")
                     for x in range (len(songs)):
                         setlist.append(songs[x].get("name"))
                     results.append({'artist': artist_name, 
                                 'date': concert_date, 
-                                'venue': venue,
+                                'venue': venueName,
                                 'city': city,
+                                'state': venueState,
+                                'country': venueCountry,
                                 'lat': lat,
                                 'lng': lng,
                                 'set': setlist})
         else:
             results = None
     return jsonify(results)
+
+#Gets coordinates by calling google geocoding
+def getVenueCoords(address, defLat, defLng):
+    apiKey = os.getenv('GOOGLE_DEV_API')
+    geocode_url = f"https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={apiKey}"
+    response = requests.get(geocode_url)
+    if response.status_code == 200:
+        data = response.json()
+        if data['status'] == 'OK':
+            location = data['results'][0]['geometry']['location']
+            return location['lat'], location['lng']
+        else:
+            return defLat, defLng #Return city coordinates if venue coordinates could not be found
+    else:
+        print(f"HTTP GET Request failed with status code {response.status_code}")
 
 if __name__ == "__main__":
     # to run me from the command line: <flask --app main run> or <python app.py>      
