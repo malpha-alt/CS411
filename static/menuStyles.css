@@ -35,3 +35,13 @@
     position: relative;
     top: 1px;
 }
+
+.profile-header{
+    text-align: center;
+    color: #ffffff; 
+}
+
+.profile-container{
+    text-align: center;
+    padding: 20px;
+}

@@ -187,14 +187,51 @@ function refreshPage(){
 
 //Display menu options again
 function showMenuOptions() {
-    var menuContent = document.querySelector('#menuContent');
-    menuContent.innerHTML = `
-        <div class="menuButtonOptions">
-            <a href="#" onclick="displayConcerts()" class="menuOptions">Concert List</a>
-            <div class="menuOptions">Friends List</div>
-            <div class="menuOptions">Settings</div> 
-            <a href="/profile/profile" class="menuOptions">Profile</a> 
-            <a href="/auth/logout" class="logoutButton">Logout</a>
-        </div>`
-        ;
+    $.ajax({
+        url: '/profile/profile',  
+        type: 'GET',
+        success: function(data) {
+            var menuContent = document.querySelector('#menuContent');
+            menuContent.innerHTML = `
+            <h1 class="profile-header">Welcome, ${data.name}! </h1>
+            <div class="profile-container">
+                <img src="${data.profile_picture}" alt="Profile Picture" style="width: 150px; height:150px;">
+            </div>
+            <div class="menuButtonOptions">
+                <a href="#" onclick="displayConcerts()" class="menuOptions">Concert List</a>
+                <div class="menuOptions">Friends List</div>
+                <div class="menuOptions">Settings</div> 
+                <a href="#" onclick="loadProfile()" class="menuOptions">Profile</a>
+                <a href="/auth/logout" class="logoutButton">Logout</a>
+            </div>`
+            ;
+        },
+        error: function(error) {
+            console.log('Error loading menu:', error);
+            alert('Failed to load profile data.');
+        }
+    });
+}
+
+function loadProfile() {
+    $.ajax({
+        url: '/profile/profile',  
+        type: 'GET',
+        success: function(data) {
+            var menuContent = document.querySelector('#menuContent');
+            menuContent.innerHTML = `
+                <h1 class="profile-header">Welcome, ${data.name}! </h1>
+                <div class="profile-container">
+                    <img src="${data.profile_picture}" alt="Profile Picture" style="width: 150px; height:150px;">
+                    <p>Full Name: ${data.name}</p>
+                    <p>Email Address: ${data.email}</p>
+                    <!-- <a href="#edit-photo" class="edit-photo-link">Edit Profile Picture</a> -->
+                    <button onclick="showMenuOptions()" class="backButton">Back</button>
+                </div>`;
+        },
+        error: function(error) {
+            console.log('Error loading profile:', error);
+            alert('Failed to load profile data.');
+        }
+    });
 }

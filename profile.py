@@ -1,7 +1,7 @@
 import db
 import lookup
 import datetime
-from flask import Flask, Response, request, render_template, redirect, url_for, Blueprint
+from flask import Flask, Response, request, render_template, redirect, url_for, Blueprint, jsonify
 from flaskext.mysql import MySQL
 import flask_login
 from flask_login import current_user, login_required
@@ -19,4 +19,4 @@ def profile():
        'email': current_user.email,
        'profile_picture': profile_picture
     }
-    return render_template('profile.html', user=user_details)
+    return jsonify(user_details)
