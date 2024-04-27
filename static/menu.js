@@ -223,8 +223,10 @@ function loadProfile() {
                 <h1 class="profile-header">Welcome, ${data.name}! </h1>
                 <div class="profile-container">
                     <img src="${data.profile_picture}" alt="Profile Picture" style="width: 150px; height:150px;">
-                    <p>Full Name: ${data.name}</p>
-                    <p>Email Address: ${data.email}</p>
+                </div>
+                <div class="profile-details">
+                    <p class="profile-fullname">Name: ${data.name}</p>
+                    <p class="profile-email">Email Address: ${data.email}</p>
                     <!-- <a href="#edit-photo" class="edit-photo-link">Edit Profile Picture</a> -->
                     <button onclick="showMenuOptions()" class="backButton">Back</button>
                 </div>`;
