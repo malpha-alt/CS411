@@ -128,9 +128,14 @@ function removeConcert(index) { // Adds a concert to a server side variable
     const venue=concert.venue;
     const lat=concert.lat;
     const lng=concert.lng;
+
+    const city=concert.city;
+    const state=concert.state;
+    const country=concert.country;
+
     const songList=concert.songList;
     console.log(songList);
-    selectedResult = [{artist, date, venue, lat, lng, songList}];
+    selectedResult = [{lat, lng, city, date, state, venue, artist, country, songList}];
     $.ajax({
         url: '/removeconcert',
         type: 'POST',
