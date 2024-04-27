@@ -193,6 +193,7 @@ function showMenuOptions() {
             <a href="#" onclick="displayConcerts()" class="menuOptions">Concert List</a>
             <div class="menuOptions">Friends List</div>
             <div class="menuOptions">Settings</div> 
+            <a href="/profile/profile" class="menuOptions">Profile</a> 
             <a href="/auth/logout" class="logoutButton">Logout</a>
         </div>`
         ;
