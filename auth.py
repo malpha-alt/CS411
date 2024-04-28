@@ -37,7 +37,6 @@ def login():
 def login_trad():
     #Retrieves form information from front end
     data = request.get_json()
-    print(data)
     #If json data is not none
     if data:
         email = data.get('email')

@@ -61,7 +61,7 @@
             </div>
         </div>
     </body>
-    <script id = "mapCall" defer src = "{{ mapCall }}"></script>
+    <script id = "mapCall" defer src = "{{ mapCall }}" async></script>
     <script type="text/javascript" id = "concertList"> 
         window.concertList = {{ concertList | tojson | safe }};
     </script>

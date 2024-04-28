@@ -116,7 +116,7 @@ function addConcert(index) { // Adds a concert to a server side variable
     });
 }
 
-//Sends added concert to /storedata to add concert to the database
+// Sends added concert to /storedata to add concert to the database
 function removeConcert(index) { // Adds a concert to a server side variable
     var concertList = window.concertList;
     console.log('reached remove')
