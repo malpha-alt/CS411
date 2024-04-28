@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, Blueprint
+from flask import Flask, render_template, request, jsonify
 from flaskext.mysql import MySQL
 import flask_login
 from flask_login import current_user, login_required
@@ -12,8 +12,9 @@ import json
 import db
 from friends import friends_bp
 from maps import maps_bp
-from profile import profile_bp
+from profileInfo import profile_bp
 
+#Forces oauth to work on http
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
@@ -66,7 +67,6 @@ def map():
         conn, cursor = db.get_cursor()
         cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (current_user.id))
         user_searches = cursor.fetchall()
-        print(user_searches)
         #Add database information to a list to send to map creation
         concert_list = []
         for search in user_searches:
@@ -74,7 +74,6 @@ def map():
             concert_list.extend(results)
         cursor.close()
         conn.close()
-        print('Concert list 1', concert_list)
         #Builds the api call
         mapCall = f'https://maps.googleapis.com/maps/api/js?key={os.getenv('GOOGLE_DEV_API')}&callback=initMap'
         return render_template('googleMap.html', mapCall=mapCall, concertList=concert_list)
