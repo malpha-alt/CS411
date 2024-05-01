@@ -20,11 +20,16 @@
 }
 
 .menuOptions {
-    background-color: #fff;
+    background-color: #b5b4b4;
     border: 1px solid #333;
     padding: 20px;
+    width: 200px;
+    margin-bottom: 5px;
     text-align: center;
     cursor: pointer;
+    border-radius: 100px;
+    position: relative;
+    align-self: center;
 }
 
 .titles {

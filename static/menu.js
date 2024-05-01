@@ -43,13 +43,14 @@ function showSearchAndDatePicker() {
                             <div class="arrow"></div>
                             <div class="button_plus" onclick="addConcert(${i})"></div>
                             <div class="info">
-                                Venue: ${result.venue}, ${result.city} <br>
+                                Venue: ${result.venue}, ${result.city}, ${result.state}, ${result.country} <br>
                                 Setlist: <br>
+                                <ul>
                         `;
                         for (var j = 0; j < result.set.length; j++) {
-                            resultHTML += `${result.set[j]}<br>`;
+                            resultHTML += `<li>${result.set[j]}</li>`;
                         }
-                    resultsDiv.innerHTML += resultHTML+`</div></div>`;
+                    resultsDiv.innerHTML += resultHTML+`</ul></div></div>`;
                 }
                 resultsDiv.innerHTML += `</div>`;
             }
@@ -74,13 +75,13 @@ function displayConcerts() {
                 <div class="arrow"></div>
                 <div class="button_minus" onclick="removeConcert(${i})"></div>
                 <div class="info">
-                    Venue: ${concert.venue}, ${concert.city} <br>
-                    Setlist: <br>
+                    Venue: ${concert.venue}, ${concert.city}, ${concert.state}, ${concert.country}<br>
+                    Setlist: <br></ul>
             `;
         for (var j = 0; j < concert.songList.length; j++) {
-            resultHTML += `${concert.songList[j]}<br>`;
+            resultHTML += `<li>${concert.songList[j]}</li>`;
         }
-        resultHTML += `</div></div>`;
+        resultHTML += `</ul></div></div>`;
         concertDiv.innerHTML += resultHTML;
     }
 }

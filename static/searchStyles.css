@@ -35,11 +35,13 @@
     border-right-color: #645218;
     border-top-color: #645218;
     border-left-color: #645218;
+    color: white;
 }
 
 .info {
     display: none;
     margin-top: 10px;
+    color: white;
 }
 
 .containerSearch {
