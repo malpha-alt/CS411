@@ -87,7 +87,6 @@ def signup():
             return render_template('auth/signup.html', error="Email already exists.")
     return render_template('signup.html')
 
-#Not sure what this does. Source of current error (maybe).
 @auth_bp.route('/login/callback')
 def callback():
     code = request.args.get("code")
