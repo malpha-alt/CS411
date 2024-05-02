@@ -25,5 +25,5 @@ def map(user_id):
   conn.close()
 
   #Builds the api call
-  mapCall = 'https://maps.googleapis.com/maps/api/js?key=' + os.getenv('GOOGLE_MAP_API') + '&callback=initMap' # type: ignore
+  mapCall = 'https://maps.googleapis.com/maps/api/js?key=' + os.getenv('GOOGLE_DEV_API') + '&callback=initMap' # type: ignore
   return render_template('googleMap.html', mapCall=mapCall, concertList=concert_list)
