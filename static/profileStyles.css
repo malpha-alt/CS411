@@ -12,23 +12,25 @@ body, html {
     height: 100%;
 }
 
-.user-photo {
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: #555;
-}
-
 .user-info h1, .user-info p {
     text-align: center;
     margin: 10px;
 }
 
 .edit-photo-link {
-    font-size: small;
-    color: #555;
+    padding-top: 15px;
+    font-size: large;
+    color: red;
     text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+.delete-profile {
+    padding-top: 15px;
+    font-size: large;
+    color: red;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
 }
 
 .back-to-home{
@@ -37,3 +39,24 @@ body, html {
     text-decoration:none;
     text-align:left;
 }
+
+
+.profile-fullname{
+    font-size: large;
+    color: white;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+.profile-email{
+    font-size: large;
+    color: white;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+.profile-edit{
+    padding-top: 15px;
+}
+
+

@@ -233,7 +233,12 @@ function loadProfile() {
                 <div class="profile-details">
                     <p class="profile-fullname">Name: ${data.name}</p>
                     <p class="profile-email">Email Address: ${data.email}</p>
-                    <a href="#edit-photo" class="edit-photo-link">Edit Profile Picture</a>
+                    <div class="profile-edit">
+                        <a href="#edit-photo" class="edit-photo-link">Edit Profile Picture</a>
+                    </div>
+                    <div class ="profile-delete">
+                        <a href="#delete-profile" class="delete-profile">Delete Profile</a>
+                    </div>
                     <button onclick="showMenuOptions()" class="backButton">Back</button>
                 </div>`;
         },
