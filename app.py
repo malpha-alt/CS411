@@ -75,7 +75,7 @@ def map():
         cursor.close()
         conn.close()
         #Builds the api call
-        mapCall = f'https://maps.googleapis.com/maps/api/js?key={os.getenv('GOOGLE_DEV_API')}&loading=async&callback=initMap'
+        mapCall = f"https://maps.googleapis.com/maps/api/js?key={os.getenv('GOOGLE_DEV_API')}&loading=async&callback=initMap"
         return render_template('googleMap.html', mapCall=mapCall, concertList=concert_list)
     else:
         #If not logged in go to login page

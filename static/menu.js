@@ -205,7 +205,7 @@ function showMenuOptions() {
             </div>
             <div class="menuButtonOptions">
                 <a href="#" onclick="displayConcerts()" class="menuOptions">Concert List</a>
-                <div class="menuOptions">Friends List</div>
+                <a href="/friends" class="menuOptions" >Friends List</a>
                 <div class="menuOptions">Settings</div> 
                 <a href="#" onclick="loadProfile()" class="menuOptions">Profile</a>
                 <a href="/auth/logout" class="logoutButton">Logout</a>

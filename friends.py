@@ -37,8 +37,8 @@ def isFriendsWith(uid, uid2):
     conn, cursor = db.get_cursor()
     print(uid)
     print(uid2)
-    if cursor.execute("SELECT id2 FROM Friends WHERE id1 = {0} AND id2 = {1}".format(uid, uid2)):
-        print(cursor.execute("SELECT id2 FROM Friends WHERE id1 = {0} AND id2 = {1}".format(uid, uid2)))
+    if cursor.execute("SELECT id2 FROM Friends WHERE id1 = '{0}' AND id2 = '{1}'".format(uid, uid2)):
+        print(cursor.execute("SELECT id2 FROM Friends WHERE id1 = '{0}' AND id2 = '{1}'".format(uid, uid2)))
         return True
     else:
         return False
