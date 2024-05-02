@@ -49,9 +49,9 @@ def isFriendsWith(uid, uid2):
 @flask_login.login_required
 def friend():
     uid1 = (flask_login.current_user.id)
-
     friends = friendTuple((flask_login.current_user.id))
     recs = friendRecs((flask_login.current_user.id))
+    print(friends)
     return render_template('friends.html', friends = friends, recs = recs)
 
 @friends_bp.route('/friends', methods=['POST'])
