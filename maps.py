@@ -10,10 +10,10 @@ import os
 
 maps_bp = Blueprint('maps_bp', __name__, template_folder='templates')
 
-@maps_bp.route('/maps/<int:user_id>', methods=['GET'])
+@maps_bp.route('/maps/<string:user_id>', methods=['GET'])
 def map(user_id):
   conn, cursor = db.get_cursor()
-  cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (user_id,))
+  cursor.execute("SELECT search_data FROM UserSearches WHERE userID = %s", (user_id))
   user_searches = cursor.fetchall()
       
   #Add database information to a list to send to map creation
