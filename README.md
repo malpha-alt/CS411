@@ -6,6 +6,7 @@
 * Brian Choi
 
 ## Final Video Walkthrough:
+* https://drive.google.com/file/d/1SoJyg9NDr5vsP46vXUmnYc7wCA1hqmHY/view?usp=drive_link
 
 ## Launch Instructions
 
